@@ -439,13 +439,13 @@ function ScoreRing() {
           transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
         />
       </svg>
-      <div className="absolute flex flex-col items-center">
-        <span className="font-mono text-5xl font-semibold tracking-tight">78</span>
-        <span className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+      <div className="absolute flex max-w-[62%] flex-col items-center text-center">
+        <span className="font-mono text-5xl font-semibold leading-none tracking-tight">78</span>
+        <span className="mt-1.5 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
           Cadence Score
         </span>
-        <span className="mt-2 rounded-full border border-border px-2.5 py-0.5 font-mono text-xs text-accent">
-          Grade A− · +6 vs your avg
+        <span className="mt-2 rounded-full border border-border px-2 py-0.5 font-mono text-[11px] text-accent">
+          Grade A−
         </span>
       </div>
     </div>

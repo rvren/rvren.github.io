@@ -3,10 +3,13 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   Apple,
   BookMarked,
-  Clock,
+  Briefcase,
+  CalendarDays,
   Download,
+  Eye,
+  Gauge,
   Github,
-  LayoutGrid,
+  HeartPulse,
   Lightbulb,
   Search,
   ShieldCheck,
@@ -58,34 +61,49 @@ function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
 
 const features = [
   {
-    icon: Timer,
-    title: "Pomodoro focus timer",
-    body: "Configurable focus / short-break / long-break and cycles, a big circular timer with start · pause · reset · skip, and a live mini-ring in the sidebar that follows you across the app.",
+    icon: Gauge,
+    title: "Cadence Score",
+    body: "One daily 0–100 score, with a letter grade and trend, that blends your focus vs goal, how on-task you stayed, how deep it went, and your consistency — the single number you check each day.",
   },
   {
-    icon: LayoutGrid,
-    title: "Sources",
-    body: "Pick which browsers and profiles to attach. Each history DB is copied to a temp file before reading, so it works even while the browser is open.",
+    icon: Timer,
+    title: "Focus timer",
+    body: "A configurable Pomodoro with presets and optional auto-start, a big circular timer and a live sidebar ring, forgiving streaks (with earned freezes), and per-project tagging.",
+  },
+  {
+    icon: Briefcase,
+    title: "Work lens",
+    body: "Set your work hours, then see a weekly project timesheet (with CSV / HTML export), a work-vs-personal balance, deep-work quality per project, and a gentle after-hours nudge.",
+  },
+  {
+    icon: HeartPulse,
+    title: "Wellbeing & habits",
+    body: "Category time budgets, a focus goal, distraction-light-day streaks, a daily habit tracker, achievements, and a personal-records wall — momentum without the shame.",
   },
   {
     icon: TrendingUp,
-    title: "Overview & Timeline",
-    body: "Totals, unique domains, busiest day, peak hour, and a per-browser split — plus visits over time, a weekly heatmap, and hour-of-day distribution.",
+    title: "Insights & categories",
+    body: "Chronotype and golden hours, weekday-vs-weekend patterns, a category time-of-day heatmap, and browsing sessions & rabbit holes — over a two-tier offline taxonomy you can override.",
   },
   {
-    icon: LayoutGrid,
-    title: "Top Sites",
-    body: "Ranked domains with categories you can click through to search — see where your attention actually goes.",
+    icon: CalendarDays,
+    title: "Recaps & Wrapped",
+    body: "Look back at a day, week, month, or your whole year (Cadence Wrapped), plus a discovery feed of the new sites you've found — exportable, all local.",
   },
   {
     icon: BookMarked,
     title: "Bookmarks",
-    body: "A Notion-style gallery grouped by folder with real favicons extracted locally. Chromium, Firefox, Safari, and Arc pinned tabs all supported.",
+    body: "Smart collections surface your most-used, never-opened, recently-added, and duplicate bookmarks — with favicons extracted locally across Chromium, Firefox, Safari, and Arc.",
   },
   {
     icon: Search,
-    title: "Search & Insights",
-    body: "Full-text search over titles and URLs with browser and domain filters, plus an offline category breakdown and highlights.",
+    title: "Search & reading list",
+    body: "Fast full-text search with site:, before:, and after: operators, search-term insights, and a reading list of the article pages you keep returning to.",
+  },
+  {
+    icon: Eye,
+    title: "Watch & deep-dive",
+    body: "Star domains to track week-over-week, open a rich per-domain profile with related sites, and add your own tags and notes to make it yours.",
   },
 ];
 
@@ -155,9 +173,11 @@ export default function Cadence() {
             A local desktop app that pairs a Pomodoro{" "}
             <span className="text-foreground">focus timer</span> with{" "}
             <span className="text-foreground">digital-wellbeing insights</span>{" "}
-            drawn from your own browser history — so you can work in focused
-            intervals and understand where your time actually goes. Everything
-            runs directly on your machine; nothing is ever uploaded.
+            from your own browser history — distilled into a single daily{" "}
+            <span className="text-foreground">Cadence Score</span>. Work in
+            focused intervals, track projects and habits, and understand where
+            your time actually goes. Everything runs on your machine; nothing is
+            ever uploaded.
           </motion.p>
 
           <motion.div
@@ -214,31 +234,33 @@ export default function Cadence() {
           </div>
         </Section>
 
-        {/* Focus callout */}
-        <Section id="focus" index="02" title="Work in rhythm">
+        {/* Cadence Score callout */}
+        <Section id="score" index="02" title="One number for your day">
           <Reveal>
             <div className="relative overflow-hidden rounded-3xl border border-border bg-card/40 p-8 sm:p-12">
               <div className="pointer-events-none absolute right-[-6rem] top-[-6rem] h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
               <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
-                    <Clock className="h-3.5 w-3.5 text-accent" />
-                    Focus timer
+                    <Gauge className="h-3.5 w-3.5 text-accent" />
+                    Cadence Score
                   </div>
                   <h3 className="mt-5 text-2xl font-semibold tracking-tight sm:text-3xl">
-                    Focus, break, repeat — without losing the thread.
+                    Everything you do, in one honest daily score.
                   </h3>
                   <p className="mt-4 text-muted-foreground">
-                    A task label, a big circular timer, and simple controls. The
-                    timer keeps running as you move around the app, with a live
-                    mini-ring in the sidebar rail. When a session ends you get a
-                    desktop notification and a soft chime.
+                    Cadence blends your focus time, how on-task you stayed, how
+                    deep your focus went, and your day-to-day consistency into a
+                    single 0–100 score with a letter grade — compared only to
+                    your own past, never anyone else. A quick, honest read on
+                    your day, with a plain-language explanation of exactly how
+                    it's computed.
                   </p>
                   <ul className="mt-6 space-y-2.5">
                     {[
-                      "Configurable focus / short-break / long-break and cycles",
-                      "Local session tracking — today's total, streak, and recent sessions",
-                      "Desktop notification and soft chime when a session ends",
+                      "Pomodoro focus timer with presets, auto-start, and per-project tracking",
+                      "Forgiving streaks with earned freezes, plus a focus calendar and score history",
+                      "A rotating daily insight, and a little celebration when you hit your goal",
                     ].map((b) => (
                       <li
                         key={b}
@@ -250,7 +272,7 @@ export default function Cadence() {
                     ))}
                   </ul>
                 </div>
-                <TimerMock />
+                <ScoreRing />
               </div>
             </div>
           </Reveal>
@@ -293,13 +315,14 @@ export default function Cadence() {
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   Cadence reads your history locally and computes every insight
-                  on-device. There is no account, no server, and no telemetry —
-                  your data never leaves your machine. Favicons and categories
-                  are resolved offline, with a colored monogram fallback.
+                  on-device with plain, deterministic rules — no account, no
+                  server, no telemetry, and no models. Set never-track domains,
+                  auto-purge old history, rename any category, and export or wipe
+                  your data whenever you want. It never leaves your machine.
                 </p>
                 <div className="mt-5 inline-flex items-center gap-2 rounded-lg bg-secondary px-3 py-2 font-mono text-xs text-muted-foreground">
                   <Lightbulb className="h-3.5 w-3.5 text-accent" />
-                  Neon-glassmorphism UI · light & dark
+                  Offline heuristics · light &amp; dark · themeable
                 </div>
               </div>
             </Reveal>
@@ -319,7 +342,7 @@ export default function Cadence() {
                   Download the latest release
                 </h3>
                 <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-                  Universal macOS build (Apple Silicon & Intel), packaged as a
+                  Native macOS build for Apple Silicon & Intel, packaged as a
                   DMG. Grab the newest version from GitHub Releases.
                 </p>
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
@@ -385,11 +408,11 @@ export default function Cadence() {
   );
 }
 
-function TimerMock() {
+function ScoreRing() {
   const reduce = useReducedMotion();
   const r = 82;
   const c = 2 * Math.PI * r;
-  const progress = 0.68;
+  const progress = 0.78; // Cadence Score 78 / 100
   return (
     <div className="relative mx-auto grid aspect-square w-full max-w-[300px] place-items-center rounded-3xl border border-border bg-background/60 p-6">
       <svg viewBox="0 0 200 200" className="h-full w-full -rotate-90">
@@ -417,11 +440,12 @@ function TimerMock() {
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="font-mono text-4xl font-semibold tracking-tight">
-          17:04
-        </span>
+        <span className="font-mono text-5xl font-semibold tracking-tight">78</span>
         <span className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Deep work
+          Cadence Score
+        </span>
+        <span className="mt-2 rounded-full border border-border px-2.5 py-0.5 font-mono text-xs text-accent">
+          Grade A− · +6 vs your avg
         </span>
       </div>
     </div>

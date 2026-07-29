@@ -11,13 +11,13 @@ export const profile = {
   tagline:
     "Frontend engineering leader with 14+ years building production UIs and 4+ years managing teams — equally at home as a Staff/Principal IC or an Engineering Manager.",
   summary:
-    "Most recently led the React/TypeScript console for Rafay’s GPU PaaS — the product behind the company’s $11M → $31M ARR jump, demoed at NVIDIA GTC and the India AI Summit by GPU-datacenter customers running on Rafay. Architected the design system that replaced Material UI across the company, built a Claude-native frontend repo that lets non-engineers ship code via prompts, and runs a distributed 7-person UI organization across the US and India.",
+    "Most recently led the React/TypeScript console for Rafay’s GPU PaaS — the product behind the company’s growth, demoed at NVIDIA GTC and the India AI Summit by GPU-datacenter customers running on Rafay. Architected the design system that replaced Material UI across the company, built a Claude-native frontend repo that lets non-engineers ship code via prompts, and runs a distributed 7-person UI organization across the US and India.",
 };
 
 export const impact: { stat: string; label: string; detail: string }[] = [
   {
-    stat: "$11M → $31M",
-    label: "ARR at Rafay",
+    stat: "GPU PaaS",
+    label: "Rafay’s growth console",
     detail:
       "The GPU PaaS console is the surface customers evaluate, buy, and operate the product through; demoed at NVIDIA GTC and the India AI Summit.",
   },
@@ -56,7 +56,7 @@ export const experience: Role[] = [
     location: "Sunnyvale, CA",
     period: "Sep 2023 — Present",
     bullets: [
-      "Own the frontend for Rafay’s GPU PaaS — React/TypeScript console covering workflow orchestration, billing, and observability; the product central to the company’s $11M → $31M ARR growth and the demos at NVIDIA GTC and the India AI Summit.",
+      "Own the frontend for Rafay’s GPU PaaS — React/TypeScript console covering workflow orchestration, billing, and observability; the product central to the company’s growth and the demos at NVIDIA GTC and the India AI Summit.",
       "Manage 7 UI engineers across Sunnyvale and Bengaluru: hiring, performance management, mentorship, sprint planning, and weekly delivery alignment with product.",
       "Architected the React + Tailwind + shadcn/ui design system that replaced Material UI; unified visual language across the console, cut the legacy dependency footprint, and standardized component primitives for all new work.",
       "Built a Claude-native workflow inside the frontend repos: standardized the code so agents can navigate it, authored repo-level skills, and shipped a sandbox that turns plain-English requirements into reviewable PRs — PMs, designers, and support engineers now ship UI changes directly.",

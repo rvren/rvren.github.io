@@ -12,7 +12,7 @@ import { projects } from "@/data/projects";
 
 const intro = [
   "I’m a frontend engineering leader with 14+ years building production UIs and 4+ years managing teams — equally at home as a Staff/Principal IC or an engineering manager.",
-  "Most recently I led the React/TypeScript console for Rafay’s GPU PaaS — the product behind the company’s $11M → $31M ARR — and architected the design system that replaced Material UI across the company. I also built a Claude-native frontend repo that lets non-engineers ship UI via prompts, and run a distributed 7-person team across the US and India.",
+  "Most recently I led the React/TypeScript console for Rafay’s GPU PaaS — the product behind the company’s growth — and architected the design system that replaced Material UI across the company. I also built a Claude-native frontend repo that lets non-engineers ship UI via prompts, and run a distributed 7-person team across the US and India.",
 ];
 
 const contact = [

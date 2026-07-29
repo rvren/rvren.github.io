@@ -12,7 +12,13 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["'Geist Sans'", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["'Inter Variable'", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: [
+          "'Sora Variable'",
+          "'Inter Variable'",
+          "ui-sans-serif",
+          "sans-serif",
+        ],
         mono: ["'Geist Mono'", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       colors: {

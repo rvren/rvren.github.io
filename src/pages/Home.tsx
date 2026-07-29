@@ -27,12 +27,13 @@ export default function Home() {
     <main className="mx-auto max-w-2xl px-6 pb-24 pt-28 sm:pt-32">
       {/* Intro */}
       <section className="animate-fade-up">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <p className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted-foreground">
+          {profile.title}
+        </p>
+        <h1 className="mt-5 font-display text-[2.5rem] font-medium leading-[1.05] sm:text-[3.25rem]">
           {profile.name}
         </h1>
-        <p className="mt-2 text-muted-foreground">
-          {profile.title} · {profile.location}
-        </p>
+        <p className="mt-3 text-muted-foreground">{profile.location}</p>
 
         <div className="mt-8 space-y-4 leading-relaxed text-foreground/90">
           {intro.map((p) => (
@@ -63,7 +64,7 @@ export default function Home() {
             const body = (
               <div className="group flex items-start justify-between gap-4 border-t border-border py-5">
                 <div>
-                  <h3 className="font-medium transition-colors group-hover:text-accent">
+                  <h3 className="font-display text-lg font-medium transition-colors group-hover:text-accent">
                     {p.name}
                   </h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
@@ -92,7 +93,7 @@ export default function Home() {
           {experience.map((role) => (
             <article key={`${role.company}-${role.period}`}>
               <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                <h3 className="font-medium">
+                <h3 className="font-display text-base font-medium">
                   {role.title}
                   <span className="text-muted-foreground"> · {role.company}</span>
                 </h3>

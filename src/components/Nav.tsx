@@ -2,8 +2,11 @@ import { Link, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav() {
-  const { pathname } = useLocation();
+  const { pathname, key } = useLocation();
   const onHome = pathname === "/";
+  // Only offer a way "back" when the visitor reached this page via in-app
+  // navigation. A fresh/direct/standalone load has key === "default".
+  const cameFromSite = key !== "default";
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -12,13 +15,15 @@ export function Nav() {
           <span className="text-sm font-medium tracking-tight text-muted-foreground">
             RRV
           </span>
-        ) : (
+        ) : cameFromSite ? (
           <Link
             to="/"
             className="text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             ← Renjith
           </Link>
+        ) : (
+          <span aria-hidden />
         )}
         <ThemeToggle />
       </div>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Apple,
@@ -17,6 +18,43 @@ import { Section } from "@/components/Section";
 
 const RELEASES_URL = "https://github.com/rvren/history-lens/releases/latest";
 const REPO_URL = "https://github.com/rvren/history-lens";
+const LATEST_API = "https://api.github.com/repos/rvren/history-lens/releases/latest";
+
+/**
+ * Resolve direct DMG download URLs for the latest release from the public GitHub
+ * API, split by architecture (a universal build serves both). Falls back to the
+ * releases page (empty links) if the request fails or is rate-limited.
+ */
+function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
+  const [links, setLinks] = useState<{ armLink?: string; intelLink?: string }>({});
+  useEffect(() => {
+    let alive = true;
+    fetch(LATEST_API)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("release lookup failed"))))
+      .then((rel: { assets?: { name: string; browser_download_url: string }[] }) => {
+        if (!alive) return;
+        let arm: string | undefined;
+        let intel: string | undefined;
+        let universal: string | undefined;
+        for (const a of rel.assets ?? []) {
+          const n = a.name.toLowerCase();
+          if (!n.endsWith(".dmg")) continue;
+          if (n.includes("universal")) universal = a.browser_download_url;
+          else if (n.includes("arm64") || n.includes("aarch64")) arm = a.browser_download_url;
+          else if (n.includes("x64") || n.includes("x86") || n.includes("intel"))
+            intel = a.browser_download_url;
+        }
+        setLinks({ armLink: universal ?? arm, intelLink: universal ?? intel });
+      })
+      .catch(() => {
+        /* keep the releases-page fallback */
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return links;
+}
 
 const features = [
   {
@@ -62,6 +100,7 @@ const browsers = [
 
 export default function Cadence() {
   const reduce = useReducedMotion();
+  const { armLink, intelLink } = useLatestMacDownloads();
   return (
     // Scope an indigo→blue accent to the Cadence page to match the app's identity.
     <main
@@ -285,14 +324,25 @@ export default function Cadence() {
                 </p>
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
                   <a
-                    href={RELEASES_URL}
+                    href={armLink ?? RELEASES_URL}
                     target="_blank"
                     rel="noreferrer"
                     className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
                   >
                     <Download className="h-4 w-4" />
-                    Download for macOS
+                    {armLink ? "Download for Apple Silicon" : "Download for macOS"}
                   </a>
+                  {intelLink && intelLink !== armLink && (
+                    <a
+                      href={intelLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
+                    >
+                      <Download className="h-4 w-4" />
+                      Download for Intel
+                    </a>
+                  )}
                   <a
                     href={REPO_URL}
                     target="_blank"
@@ -303,6 +353,18 @@ export default function Cadence() {
                     View on GitHub
                   </a>
                 </div>
+                {(armLink || intelLink) && (
+                  <p className="mt-4 text-xs text-muted-foreground">
+                    <a
+                      href={RELEASES_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline underline-offset-2 transition-colors hover:text-foreground"
+                    >
+                      All releases &amp; notes
+                    </a>
+                  </p>
+                )}
                 <p className="mx-auto mt-6 max-w-md text-xs leading-relaxed text-muted-foreground">
                   First launch: because the build isn't notarized, right-click
                   the app and choose <span className="text-foreground">Open</span>{" "}

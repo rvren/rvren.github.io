@@ -19,19 +19,10 @@ Personal site for Renjith Rajendran Viswalekshmi, served at the root user-site U
 
 ## Conventions
 
-### Back-to-portfolio links only on internal navigation
-Standalone pages like `/cadence` can be opened directly — a shared link, the GitHub repo,
-or a bookmark — where there is nothing in-site to go "back" to. **Any link that navigates
-from such a page back to the portfolio must render only when the visitor arrived via
-in-app (SPA) navigation.** Hide it on direct / standalone / shared / external loads.
-
-Detect it with React Router's location key — a fresh entry has key `"default"`:
-
-```ts
-const cameFromSite = useLocation().key !== "default";
-```
-
-This is reliable because the `404.html` SPA fallback makes every direct hit a fresh load.
-The rule applies to **every current and future** back link (e.g. the Cadence page's nav
-"← Renjith", hero "Back to work", and footer link are all gated on `cameFromSite`).
-Non-back chrome (brand marks, taglines) stays visible regardless.
+### `/cadence` is a fully standalone product page
+The Cadence page must read as a self-contained product landing that can be shared on its
+own. **It must not show the owner's personal name/branding or any link back to the
+portfolio** — no "← Renjith", no "Back to work", no footer name link. The header on
+`/cadence` is just the theme toggle; the footer is just the "Cadence · a local-first
+desktop app" tagline. The portfolio's own "RRV" mark stays on the home page (`/`) only.
+Keep it this way for any future changes to the page.

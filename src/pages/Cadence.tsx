@@ -1,6 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  ArrowLeft,
   Apple,
   BookMarked,
   Clock,
@@ -13,7 +12,6 @@ import {
   Timer,
   TrendingUp,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 
@@ -64,9 +62,6 @@ const browsers = [
 
 export default function Cadence() {
   const reduce = useReducedMotion();
-  // Show "back to portfolio" links only when the visitor arrived via in-app
-  // navigation. A fresh/direct/standalone load has location.key === "default".
-  const cameFromSite = useLocation().key !== "default";
   return (
     // Scope an indigo→blue accent to the Cadence page to match the app's identity.
     <main
@@ -83,17 +78,7 @@ export default function Cadence() {
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-accent/15 blur-3xl mask-radial" />
 
         <div className="container relative pb-14 pt-32 sm:pt-40">
-          {cameFromSite && (
-            <Link
-              to="/#apps"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to work
-            </Link>
-          )}
-
-          <div className="mt-10 flex flex-col items-start gap-8 sm:flex-row sm:items-center">
+          <div className="flex flex-col items-start gap-8 sm:flex-row sm:items-center">
             <motion.img
               src="/cadence-icon.svg"
               alt="Cadence app icon"
@@ -330,14 +315,7 @@ export default function Cadence() {
       </div>
 
       <footer className="border-t border-border">
-        <div className="container flex flex-col items-center justify-between gap-3 py-10 text-xs text-muted-foreground sm:flex-row">
-          {cameFromSite ? (
-            <Link to="/" className="transition-colors hover:text-foreground">
-              ← Renjith Rajendran Viswalekshmi
-            </Link>
-          ) : (
-            <span />
-          )}
+        <div className="container flex items-center justify-center py-10 text-xs text-muted-foreground">
           <span className="font-mono">Cadence · a local-first desktop app</span>
         </div>
       </footer>

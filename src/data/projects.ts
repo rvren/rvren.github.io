@@ -27,8 +27,8 @@ export const projects: Project[] = [
     description:
       "A local-first design-to-code studio for the desktop. Build interfaces on an infinite canvas, wire in live data, manage a themed design system, and sketch architecture — then export clean React + Tailwind. What you build on the canvas is the code you ship; projects live in a local SQLite database on your machine.",
     tags: ["Electron", "React", "TypeScript", "better-sqlite3", "Tailwind"],
-    href: "/buildboard",
-    internal: true,
+    href: "https://rvren.github.io/buildboard/",
+    internal: false,
     cta: "Explore BuildBoard",
     year: "2026",
   },

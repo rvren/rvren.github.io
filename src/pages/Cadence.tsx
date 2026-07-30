@@ -8,7 +8,6 @@ import {
   Download,
   Eye,
   Gauge,
-  Github,
   HeartPulse,
   Lightbulb,
   Search,
@@ -20,7 +19,6 @@ import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 
 const RELEASES_URL = "https://github.com/rvren/history-lens/releases/latest";
-const REPO_URL = "https://github.com/rvren/history-lens";
 const LATEST_API = "https://api.github.com/repos/rvren/history-lens/releases/latest";
 
 /**
@@ -195,15 +193,6 @@ export default function Cadence() {
               <Download className="h-4 w-4" />
               Download for macOS
             </a>
-            <a
-              href={REPO_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-5 py-2.5 text-sm font-medium transition-colors hover:bg-secondary"
-            >
-              <Github className="h-4 w-4" />
-              Source
-            </a>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-accent" />
               100% local · nothing uploaded
@@ -366,15 +355,6 @@ export default function Cadence() {
                       Download for Intel
                     </a>
                   )}
-                  <a
-                    href={REPO_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
-                  >
-                    <Github className="h-4 w-4" />
-                    View on GitHub
-                  </a>
                 </div>
                 {(armLink || intelLink) && (
                   <p className="mt-4 text-xs text-muted-foreground">

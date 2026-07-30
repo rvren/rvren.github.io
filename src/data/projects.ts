@@ -23,13 +23,13 @@ export const projects: Project[] = [
   },
   {
     name: "BuildBoard",
-    tagline: "A visual app builder.",
+    tagline: "Design, then ship.",
     description:
-      "Design screens, arrange components on a canvas, wire up data sources, and generate code. Runs entirely in the browser — no backend, state persists to localStorage.",
-    tags: ["React", "Vite", "TypeScript", "zustand", "Tailwind"],
-    href: "https://rvren.github.io/buildboard/",
-    internal: false,
-    cta: "Open the live app",
-    year: "2025",
+      "A local-first design-to-code studio for the desktop. Build interfaces on an infinite canvas, wire in live data, manage a themed design system, and sketch architecture — then export clean React + Tailwind. What you build on the canvas is the code you ship; projects live in a local SQLite database on your machine.",
+    tags: ["Electron", "React", "TypeScript", "better-sqlite3", "Tailwind"],
+    href: "/buildboard",
+    internal: true,
+    cta: "Explore BuildBoard",
+    year: "2026",
   },
 ];

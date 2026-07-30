@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Nav } from "./components/Nav";
 import Home from "./pages/Home";
 import Cadence from "./pages/Cadence";
+import BuildBoard from "./pages/BuildBoard";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -20,6 +21,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cadence" element={<Cadence />} />
+        <Route path="/buildboard" element={<BuildBoard />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </div>

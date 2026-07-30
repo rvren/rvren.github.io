@@ -5,6 +5,7 @@ import {
   Blocks,
   Boxes,
   Code2,
+  Cpu,
   Database,
   Download,
   HardDrive,
@@ -12,6 +13,7 @@ import {
   ShieldCheck,
   Sparkles,
   SwatchBook,
+  Tag,
   Waypoints,
 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
@@ -20,33 +22,72 @@ import { Section } from "@/components/Section";
 const RELEASES_URL = "https://github.com/rvren/buildboard/releases/latest";
 const LATEST_API = "https://api.github.com/repos/rvren/buildboard/releases/latest";
 
+type MacPackage = {
+  key: "arm" | "intel" | "universal";
+  arch: string;
+  hint: string;
+  url: string;
+  sizeMB: number;
+};
+
+type LatestRelease = {
+  version?: string;
+  packages: MacPackage[];
+  armLink?: string;
+  intelLink?: string;
+};
+
+const ARCH_META: Record<MacPackage["key"], { arch: string; hint: string }> = {
+  arm: { arch: "Apple Silicon", hint: "M1 / M2 / M3 Macs" },
+  intel: { arch: "Intel", hint: "Older x86-64 Macs" },
+  universal: { arch: "macOS (Universal)", hint: "Apple Silicon & Intel" },
+};
+
 /**
- * Resolve direct DMG download URLs for the latest release from the public GitHub
- * API, split by architecture (a universal build serves both). Falls back to the
- * releases page (empty links) if the request fails, is rate-limited, or no
- * release has been published yet.
+ * Resolve the latest published release from the public GitHub API: its version
+ * plus the list of installable macOS packages (.dmg), split by architecture.
+ * Falls back to the releases page (empty list) if the request fails, is
+ * rate-limited, or no release has been published yet.
  */
-function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
-  const [links, setLinks] = useState<{ armLink?: string; intelLink?: string }>({});
+function useLatestRelease(): LatestRelease {
+  const [state, setState] = useState<LatestRelease>({ packages: [] });
   useEffect(() => {
     let alive = true;
     fetch(LATEST_API)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("release lookup failed"))))
-      .then((rel: { assets?: { name: string; browser_download_url: string }[] }) => {
-        if (!alive) return;
-        let arm: string | undefined;
-        let intel: string | undefined;
-        let universal: string | undefined;
-        for (const a of rel.assets ?? []) {
-          const n = a.name.toLowerCase();
-          if (!n.endsWith(".dmg")) continue;
-          if (n.includes("universal")) universal = a.browser_download_url;
-          else if (n.includes("arm64") || n.includes("aarch64")) arm = a.browser_download_url;
-          else if (n.includes("x64") || n.includes("x86") || n.includes("intel"))
-            intel = a.browser_download_url;
-        }
-        setLinks({ armLink: universal ?? arm, intelLink: universal ?? intel });
-      })
+      .then(
+        (rel: {
+          tag_name?: string;
+          name?: string;
+          assets?: { name: string; browser_download_url: string; size: number }[];
+        }) => {
+          if (!alive) return;
+          const packages: MacPackage[] = [];
+          for (const a of rel.assets ?? []) {
+            const n = a.name.toLowerCase();
+            if (!n.endsWith(".dmg")) continue;
+            const key: MacPackage["key"] = n.includes("universal")
+              ? "universal"
+              : n.includes("x64") || n.includes("x86") || n.includes("intel")
+                ? "intel"
+                : "arm";
+            packages.push({
+              key,
+              ...ARCH_META[key],
+              url: a.browser_download_url,
+              sizeMB: Math.round(a.size / 1048576),
+            });
+          }
+          // Apple Silicon first, then Intel, then any universal.
+          const order = { arm: 0, universal: 1, intel: 2 } as const;
+          packages.sort((x, y) => order[x.key] - order[y.key]);
+          const armLink =
+            packages.find((p) => p.key === "arm" || p.key === "universal")?.url;
+          const intelLink =
+            packages.find((p) => p.key === "intel" || p.key === "universal")?.url;
+          setState({ version: rel.tag_name ?? rel.name, packages, armLink, intelLink });
+        },
+      )
       .catch(() => {
         /* keep the releases-page fallback */
       });
@@ -54,7 +95,7 @@ function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
       alive = false;
     };
   }, []);
-  return links;
+  return state;
 }
 
 const features = [
@@ -92,7 +133,7 @@ const features = [
 
 export default function BuildBoard() {
   const reduce = useReducedMotion();
-  const { armLink, intelLink } = useLatestMacDownloads();
+  const { version, packages } = useLatestRelease();
   return (
     // Scope a TechCrunch-green identity to the BuildBoard page to match the app.
     <main
@@ -164,9 +205,7 @@ export default function BuildBoard() {
             className="mt-9 flex flex-wrap items-center gap-3"
           >
             <a
-              href={armLink ?? RELEASES_URL}
-              target="_blank"
-              rel="noreferrer"
+              href="#download"
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
               <Download className="h-4 w-4" />
@@ -174,7 +213,7 @@ export default function BuildBoard() {
             </a>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-accent" />
-              Local-first · offline · your data
+              {version ? `Latest · ${version}` : "Local-first · offline"}
             </span>
           </motion.div>
         </div>
@@ -306,42 +345,68 @@ export default function BuildBoard() {
         {/* Download */}
         <Section id="download" index="04" title="Get BuildBoard">
           <Reveal>
-            <div className="relative overflow-hidden rounded-3xl border border-border bg-card/50 p-8 text-center sm:p-14">
+            <div className="relative overflow-hidden rounded-3xl border border-border bg-card/50 p-8 sm:p-12">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-accent/10 blur-3xl" />
               <div className="relative">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary text-primary-foreground">
-                  <Apple className="h-7 w-7" />
+                <div className="flex flex-col items-center text-center">
+                  <div className="grid h-14 w-14 place-items-center rounded-2xl bg-primary text-primary-foreground">
+                    <Apple className="h-7 w-7" />
+                  </div>
+                  <h3 className="mt-6 text-2xl font-semibold tracking-tight sm:text-3xl">
+                    Download for macOS
+                  </h3>
+                  <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
+                    <Tag className="h-3.5 w-3.5 text-accent" />
+                    {version ? `Latest release · ${version}` : "Latest release · GitHub"}
+                  </div>
+                  <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
+                    Native, notarization-free DMG installers. Pick the build for
+                    your Mac's chip.
+                  </p>
                 </div>
-                <h3 className="mt-6 text-2xl font-semibold tracking-tight sm:text-3xl">
-                  Download the latest release
-                </h3>
-                <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-                  Native macOS build for Apple Silicon &amp; Intel, packaged as a
-                  DMG. Grab the newest version from GitHub Releases.
-                </p>
-                <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-                  <a
-                    href={armLink ?? RELEASES_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-                  >
-                    <Download className="h-4 w-4" />
-                    {armLink ? "Download for Apple Silicon" : "Download for macOS"}
-                  </a>
-                  {intelLink && intelLink !== armLink && (
+
+                {/* Installable packages */}
+                <div className="mx-auto mt-7 grid max-w-xl gap-3">
+                  {packages.length > 0 ? (
+                    packages.map((p) => (
+                      <a
+                        key={p.key}
+                        href={p.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group flex items-center justify-between gap-4 rounded-2xl border border-border bg-background/60 p-4 text-left transition-colors hover:border-accent/50"
+                      >
+                        <span className="flex items-center gap-3">
+                          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-accent/10 text-accent">
+                            <Cpu className="h-5 w-5" />
+                          </span>
+                          <span>
+                            <span className="block font-medium">{p.arch}</span>
+                            <span className="block font-mono text-xs text-muted-foreground">
+                              {p.hint} · .dmg · {p.sizeMB} MB
+                            </span>
+                          </span>
+                        </span>
+                        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform group-hover:-translate-y-0.5">
+                          <Download className="h-4 w-4" />
+                          Download
+                        </span>
+                      </a>
+                    ))
+                  ) : (
                     <a
-                      href={intelLink}
+                      href={RELEASES_URL}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
                     >
                       <Download className="h-4 w-4" />
-                      Download for Intel
+                      Download from GitHub Releases
                     </a>
                   )}
                 </div>
-                <p className="mt-4 text-xs text-muted-foreground">
+
+                <p className="mt-5 text-center text-xs text-muted-foreground">
                   <a
                     href={RELEASES_URL}
                     target="_blank"
@@ -351,7 +416,7 @@ export default function BuildBoard() {
                     All releases &amp; notes
                   </a>
                 </p>
-                <p className="mx-auto mt-6 max-w-md text-xs leading-relaxed text-muted-foreground">
+                <p className="mx-auto mt-6 max-w-md text-center text-xs leading-relaxed text-muted-foreground">
                   First launch: because the build isn't notarized, right-click
                   the app and choose <span className="text-foreground">Open</span>{" "}
                   to get past Gatekeeper.

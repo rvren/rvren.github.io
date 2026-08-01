@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  Apple,
   BookMarked,
   Briefcase,
   CalendarDays,
-  Download,
   Eye,
   Gauge,
   HeartPulse,
@@ -55,6 +53,39 @@ function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
     };
   }, []);
   return links;
+}
+
+/** The original Apple logo (used on the macOS download controls). */
+function AppleLogo({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+      <path d="M16.365 1.43c0 1.14-.417 2.2-1.11 2.99-.744.86-1.96 1.52-3.06 1.43-.13-1.1.43-2.27 1.11-3 .76-.82 2.06-1.44 3.06-1.45zM20.9 17.02c-.55 1.28-.82 1.85-1.53 2.98-.99 1.57-2.39 3.53-4.12 3.54-1.54.02-1.94-1.01-4.03-1-2.09.01-2.53 1.02-4.07 1-1.73-.01-3.05-1.78-4.04-3.35C1.3 17.8.98 13.5 2.94 11.02c.98-1.24 2.4-1.97 3.85-1.97 1.48 0 2.41 1.01 3.63 1.01 1.19 0 1.91-1.01 3.62-1.01 1.29 0 2.66.7 3.63 1.91-3.19 1.75-2.67 6.31.23 8.06z" />
+    </svg>
+  );
+}
+
+/** A copyable one-line shell command (for the quarantine-clear fix). */
+function CopyCommand({ cmd }: { cmd: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-border bg-background/60 px-3 py-2">
+      <code className="overflow-x-auto font-mono text-xs text-foreground">
+        {cmd}
+      </code>
+      <button
+        type="button"
+        onClick={() => {
+          navigator.clipboard?.writeText(cmd).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+          });
+        }}
+        className="shrink-0 rounded-md border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+      >
+        {copied ? "Copied" : "Copy"}
+      </button>
+    </div>
+  );
 }
 
 const features = [
@@ -190,7 +221,7 @@ export default function Cadence() {
               rel="noreferrer"
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
-              <Download className="h-4 w-4" />
+              <AppleLogo className="h-4 w-4" />
               Download for macOS
             </a>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-xs text-muted-foreground">
@@ -325,7 +356,7 @@ export default function Cadence() {
               <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-accent/10 blur-3xl" />
               <div className="relative">
                 <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary text-primary-foreground">
-                  <Apple className="h-7 w-7" />
+                  <AppleLogo className="h-7 w-7" />
                 </div>
                 <h3 className="mt-6 text-2xl font-semibold tracking-tight sm:text-3xl">
                   Download the latest release
@@ -341,7 +372,7 @@ export default function Cadence() {
                     rel="noreferrer"
                     className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
                   >
-                    <Download className="h-4 w-4" />
+                    <AppleLogo className="h-4 w-4" />
                     {armLink ? "Download for Apple Silicon" : "Download for macOS"}
                   </a>
                   {intelLink && intelLink !== armLink && (
@@ -351,7 +382,7 @@ export default function Cadence() {
                       rel="noreferrer"
                       className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
                     >
-                      <Download className="h-4 w-4" />
+                      <AppleLogo className="h-4 w-4" />
                       Download for Intel
                     </a>
                   )}
@@ -368,11 +399,28 @@ export default function Cadence() {
                     </a>
                   </p>
                 )}
-                <p className="mx-auto mt-6 max-w-md text-xs leading-relaxed text-muted-foreground">
-                  First launch: because the build isn't notarized, right-click
-                  the app and choose <span className="text-foreground">Open</span>{" "}
-                  to get past Gatekeeper.
-                </p>
+                <div className="mx-auto mt-8 max-w-md rounded-xl border border-border bg-background/40 p-5 text-left">
+                  <h4 className="text-sm font-medium text-foreground">
+                    macOS says the app is “damaged” or from an unidentified
+                    developer?
+                  </h4>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    That’s expected for a free, un-notarized app — it’s ad-hoc
+                    signed and safe; macOS just quarantines anything downloaded
+                    from the web. Drag Cadence into your Applications folder,
+                    then clear the quarantine flag once in Terminal:
+                  </p>
+                  <CopyCommand cmd="xattr -cr /Applications/Cadence.app" />
+                  <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                    <span className="text-foreground">
+                      Apple Silicon (M1/M2/M3):
+                    </span>{" "}
+                    running the command is required — macOS won’t launch a
+                    quarantined Apple-Silicon app until the flag is cleared. Then
+                    open it normally. (Alternatively: right-click the app →{" "}
+                    <span className="text-foreground">Open</span>.)
+                  </p>
+                </div>
               </div>
             </div>
           </Reveal>

@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   BookMarked,
   Briefcase,
+  CalendarClock,
   CalendarDays,
   Eye,
   Gauge,
@@ -10,6 +11,7 @@ import {
   Lightbulb,
   Search,
   ShieldCheck,
+  StickyNote,
   Timer,
   TrendingUp,
 } from "lucide-react";
@@ -98,6 +100,16 @@ const features = [
     icon: Timer,
     title: "Focus timer",
     body: "A configurable Pomodoro with presets and optional auto-start, a big circular timer and a live sidebar ring, forgiving streaks (with earned freezes), and per-project tagging.",
+  },
+  {
+    icon: StickyNote,
+    title: "Notes & tasks",
+    body: "Quick-capture thoughts and to-dos anchored to the focus session you're in (⌘⇧N from anywhere) — searchable, checkable, and kept entirely on your Mac.",
+  },
+  {
+    icon: CalendarClock,
+    title: "Calendar",
+    body: "Connect Google Calendar (read-only, opt-in) to see meetings beside your focus — free-to-focus time today, your longest open block, after-hours load, and meeting-free days.",
   },
   {
     icon: Briefcase,
@@ -204,9 +216,11 @@ export default function Cadence() {
             <span className="text-foreground">digital-wellbeing insights</span>{" "}
             from your own browser history — distilled into a single daily{" "}
             <span className="text-foreground">Cadence Score</span>. Work in
-            focused intervals, track projects and habits, and understand where
-            your time actually goes. Everything runs on your machine; nothing is
-            ever uploaded.
+            focused intervals, keep <span className="text-foreground">notes</span>{" "}
+            and <span className="text-foreground">meetings</span> beside your
+            focus, track projects and habits, and understand where your time
+            actually goes. Everything runs on your machine; nothing is ever
+            uploaded.
           </motion.p>
 
           <motion.div

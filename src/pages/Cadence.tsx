@@ -18,8 +18,9 @@ import {
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
 
-const RELEASES_URL = "https://github.com/rvren/history-lens/releases/latest";
-const LATEST_API = "https://api.github.com/repos/rvren/history-lens/releases/latest";
+// Source is private; public macOS builds are published to rvren/cadence-releases.
+const RELEASES_URL = "https://github.com/rvren/cadence-releases/releases/latest";
+const LATEST_API = "https://api.github.com/repos/rvren/cadence-releases/releases/latest";
 
 /**
  * Resolve direct DMG download URLs for the latest release from the public GitHub

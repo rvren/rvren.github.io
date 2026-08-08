@@ -216,17 +216,8 @@ const browsers = ["Google Chrome", "Microsoft Edge", "Brave", "Arc", "Firefox", 
 export default function Cadence() {
   const reduce = useReducedMotion();
   const { armLink, intelLink } = useLatestMacDownloads();
+  // Detection only highlights the likely build; both are always shown explicitly.
   const arch = useMacArch();
-  // Pick the build that matches the visitor's Mac; fall back to the releases page
-  // when we can't tell (both are always offered explicitly below the button).
-  const primaryLink =
-    arch === "x64" ? (intelLink ?? RELEASES_URL) : arch === "arm64" ? (armLink ?? RELEASES_URL) : RELEASES_URL;
-  const primaryLabel =
-    arch === "x64"
-      ? "Download for Intel"
-      : arch === "arm64"
-        ? "Download for Apple Silicon"
-        : "Download for macOS";
   return (
     // Scope an indigo→blue accent to the Cadence page to match the app's identity.
     <main
@@ -293,45 +284,48 @@ export default function Cadence() {
                 transition={{ duration: 0.6, delay: 0.24 }}
                 className="mt-9 flex flex-wrap items-center gap-3"
               >
+                {/* Two explicit builds — you choose. Detection only highlights a
+                    guess so it can never auto-serve the wrong architecture. */}
                 <a
-                  href={primaryLink}
+                  href={armLink ?? RELEASES_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                  className={
+                    arch === "x64"
+                      ? "inline-flex items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium transition-colors hover:bg-secondary"
+                      : "group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                  }
                 >
                   <AppleLogo className="h-4 w-4" />
-                  {primaryLabel}
+                  Apple Silicon
+                  {arch === "arm64" && <span className="opacity-70">· yours</span>}
+                </a>
+                <a
+                  href={intelLink ?? RELEASES_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={
+                    arch === "x64"
+                      ? "group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                      : "inline-flex items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium transition-colors hover:bg-secondary"
+                  }
+                >
+                  <AppleLogo className="h-4 w-4" />
+                  Intel
+                  {arch === "x64" && <span className="opacity-70">· yours</span>}
                 </a>
                 <a
                   href="#features"
-                  className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
+                  className="inline-flex items-center gap-2 px-2 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Explore features
                 </a>
               </motion.div>
               <p className="mt-3 font-mono text-xs text-muted-foreground">
-                {arch ? (
-                  <>Detected {arch === "arm64" ? "Apple Silicon" : "Intel"} · or grab </>
-                ) : (
-                  <>Choose your Mac: </>
-                )}
-                <a
-                  href={armLink ?? RELEASES_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline underline-offset-2 hover:text-foreground"
-                >
-                  Apple Silicon
-                </a>
-                {" · "}
-                <a
-                  href={intelLink ?? RELEASES_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline underline-offset-2 hover:text-foreground"
-                >
-                  Intel
-                </a>
+                Two Mac builds ·{" "}
+                <span className="text-foreground">Apple Silicon</span> = M1/M2/M3/M4 ·{" "}
+                <span className="text-foreground">Intel</span> = older Macs. Not sure? Apple menu →
+                About This Mac.
               </p>
             </div>
 

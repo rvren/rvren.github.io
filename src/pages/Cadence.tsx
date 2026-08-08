@@ -59,6 +59,55 @@ function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
   return links;
 }
 
+/**
+ * Best-effort detect the Mac CPU architecture so we can offer the right build.
+ * Chromium exposes it via userAgentData high-entropy hints (reliable); Safari/
+ * Firefox fall back to the WebGL renderer string (Apple GPU → arm64, Intel/AMD →
+ * x64). Returns null when we can't tell — the UI then shows both explicitly.
+ */
+async function detectMacArch(): Promise<"arm64" | "x64" | null> {
+  const uaData = (navigator as unknown as {
+    userAgentData?: {
+      getHighEntropyValues?: (h: string[]) => Promise<{ architecture?: string }>;
+    };
+  }).userAgentData;
+  if (uaData?.getHighEntropyValues) {
+    try {
+      const v = await uaData.getHighEntropyValues(["architecture"]);
+      if (v.architecture === "arm") return "arm64";
+      if (v.architecture === "x86") return "x64";
+    } catch {
+      /* ignore */
+    }
+  }
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = (canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+    const dbg = gl?.getExtension("WEBGL_debug_renderer_info");
+    const r = dbg && gl ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : "";
+    if (/intel|amd|radeon/i.test(r)) return "x64";
+    if (/apple/i.test(r)) return "arm64";
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+function useMacArch(): "arm64" | "x64" | null {
+  const [arch, setArch] = useState<"arm64" | "x64" | null>(null);
+  useEffect(() => {
+    let alive = true;
+    void detectMacArch().then((a) => {
+      if (alive) setArch(a);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return arch;
+}
+
 /** Apple logo — the modern, accurate glyph (used on the macOS download controls). */
 function AppleLogo({ className }: { className?: string }) {
   return (
@@ -167,6 +216,17 @@ const browsers = ["Google Chrome", "Microsoft Edge", "Brave", "Arc", "Firefox", 
 export default function Cadence() {
   const reduce = useReducedMotion();
   const { armLink, intelLink } = useLatestMacDownloads();
+  const arch = useMacArch();
+  // Pick the build that matches the visitor's Mac; fall back to the releases page
+  // when we can't tell (both are always offered explicitly below the button).
+  const primaryLink =
+    arch === "x64" ? (intelLink ?? RELEASES_URL) : arch === "arm64" ? (armLink ?? RELEASES_URL) : RELEASES_URL;
+  const primaryLabel =
+    arch === "x64"
+      ? "Download for Intel"
+      : arch === "arm64"
+        ? "Download for Apple Silicon"
+        : "Download for macOS";
   return (
     // Scope an indigo→blue accent to the Cadence page to match the app's identity.
     <main
@@ -234,13 +294,13 @@ export default function Cadence() {
                 className="mt-9 flex flex-wrap items-center gap-3"
               >
                 <a
-                  href={armLink ?? RELEASES_URL}
+                  href={primaryLink}
                   target="_blank"
                   rel="noreferrer"
                   className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
                 >
                   <AppleLogo className="h-4 w-4" />
-                  Download for macOS
+                  {primaryLabel}
                 </a>
                 <a
                   href="#features"
@@ -250,7 +310,28 @@ export default function Cadence() {
                 </a>
               </motion.div>
               <p className="mt-3 font-mono text-xs text-muted-foreground">
-                Universal macOS build · Apple Silicon &amp; Intel
+                {arch ? (
+                  <>Detected {arch === "arm64" ? "Apple Silicon" : "Intel"} · or grab </>
+                ) : (
+                  <>Choose your Mac: </>
+                )}
+                <a
+                  href={armLink ?? RELEASES_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-foreground"
+                >
+                  Apple Silicon
+                </a>
+                {" · "}
+                <a
+                  href={intelLink ?? RELEASES_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-foreground"
+                >
+                  Intel
+                </a>
               </p>
             </div>
 
@@ -432,30 +513,46 @@ export default function Cadence() {
                   Download the latest release
                 </h3>
                 <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
-                  One universal macOS build for Apple Silicon &amp; Intel, packaged as a DMG. Grab
-                  the newest version from GitHub Releases — the app auto-updates from there.
+                  Native macOS builds for Apple Silicon &amp; Intel, packaged as a DMG. Grab the one
+                  for your Mac — the app auto-updates from GitHub Releases after that.
+                  {arch && (
+                    <>
+                      {" "}
+                      Yours looks like{" "}
+                      <span className="text-foreground">
+                        {arch === "arm64" ? "Apple Silicon" : "Intel"}
+                      </span>
+                      .
+                    </>
+                  )}
                 </p>
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
                   <a
                     href={armLink ?? RELEASES_URL}
                     target="_blank"
                     rel="noreferrer"
-                    className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                    className={
+                      arch === "x64"
+                        ? "inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
+                        : "group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                    }
                   >
                     <AppleLogo className="h-4 w-4" />
-                    Download for macOS
+                    Apple Silicon
                   </a>
-                  {intelLink && intelLink !== armLink && (
-                    <a
-                      href={intelLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
-                    >
-                      <AppleLogo className="h-4 w-4" />
-                      Download for Intel
-                    </a>
-                  )}
+                  <a
+                    href={intelLink ?? RELEASES_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={
+                      arch === "x64"
+                        ? "group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
+                        : "inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
+                    }
+                  >
+                    <AppleLogo className="h-4 w-4" />
+                    Intel
+                  </a>
                 </div>
                 {(armLink || intelLink) && (
                   <p className="mt-4 text-xs text-muted-foreground">

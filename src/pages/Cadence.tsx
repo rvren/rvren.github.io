@@ -557,15 +557,18 @@ export default function Cadence() {
                       <AppleLogo className="h-5 w-5 shrink-0 text-muted-foreground" />
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm font-medium">
-                          {b.arch}
-                          {b.arch === "Apple Silicon" && (
-                            <span className="ml-1.5 font-normal text-muted-foreground">
-                              (M1–M5)
-                            </span>
-                          )}
+                          {b.arch === "Apple Silicon"
+                            ? "Apple Silicon (arm64)"
+                            : b.arch === "Intel"
+                              ? "Intel (x64)"
+                              : b.arch}
                         </span>
-                        <span className="block truncate font-mono text-[11px] text-muted-foreground">
-                          {b.name}
+                        <span className="block text-[11px] text-muted-foreground">
+                          {b.arch === "Apple Silicon"
+                            ? "M1–M5 · native, fastest"
+                            : b.arch === "Intel"
+                              ? "Runs on any Mac — Intel, or Apple Silicon via Rosetta"
+                              : "macOS"}
                           {b.size ? ` · ${Math.round(b.size / 1048576)} MB` : ""}
                         </span>
                       </span>

@@ -101,6 +101,37 @@
     -webkit-mask-image: radial-gradient(closest-side, black, transparent);
     mask-image: radial-gradient(closest-side, black, transparent);
   }
+  /* Serif display — matches the app's premium (New York) headline face. */
+  .font-serif {
+    font-family: "New York", ui-serif, Georgia, "Times New Roman", serif;
+    letter-spacing: -0.015em;
+  }
+  /* Frosted glass surface — mirrors the app's glassmorphism skins. */
+  .glass {
+    background-color: hsl(var(--card) / 0.6);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    backdrop-filter: blur(18px) saturate(1.35);
+    border: 1px solid hsl(var(--border) / 0.7);
+  }
+  /* Premium layered shadow + accent halo. */
+  .premium-shadow {
+    box-shadow:
+      0 1px 2px 0 hsl(24 10% 6% / 0.06),
+      0 30px 60px -32px hsl(var(--accent) / 0.35);
+  }
+  .accent-glow {
+    box-shadow: 0 0 0 1px hsl(var(--accent) / 0.18), 0 24px 70px -34px hsl(var(--accent) / 0.6);
+  }
+  /* Barely-there film grain for a printed, luxe texture. */
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.02;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

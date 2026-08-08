@@ -228,6 +228,10 @@ const themes = [
   { name: "Velvet", tag: "Midnight glass", colors: ["#14101f", "#b98cf0", "#1f1830"] },
   { name: "Opal", tag: "Light glass", colors: ["#f7eefb", "#c86ad6", "#ffffff"] },
   { name: "Noir", tag: "Black & white", colors: ["#0f0f0f", "#f4f4f4", "#232323"] },
+  { name: "Terminal", tag: "Green CRT", colors: ["#0a0f0a", "#4ade80", "#16281a"] },
+  { name: "Matrix", tag: "Neon green", colors: ["#020806", "#22ff88", "#0a1a10"] },
+  { name: "Amber CRT", tag: "Amber phosphor", colors: ["#0d0a05", "#ffab2e", "#1a1408"] },
+  { name: "DOS Blue", tag: "IBM terminal", colors: ["#0e1b52", "#5ee6ff", "#1b2f75"] },
 ];
 
 const browsers = ["Google Chrome", "Microsoft Edge", "Brave", "Arc", "Firefox", "Safari"];
@@ -403,12 +407,13 @@ export default function Cadence() {
         <Section id="themes" index="02" title="Make it yours">
           <Reveal>
             <p className="mb-8 max-w-2xl text-muted-foreground">
-              Cadence ships with a deep set of hand-tuned themes — warm and calm, airy
-              glassmorphism, fintech-luxe premium, and a strictly black-and-white Noir — each in
-              light and dark. Every element recolors to match.
+              Cadence ships with 30+ hand-tuned themes — warm and calm, airy glassmorphism,
+              fintech-luxe premium, monospace CRT terminals (green, amber, Matrix, DOS blue), and a
+              strictly black-and-white Noir — each in light and dark. Every element, chart and icon
+              recolors to match.
             </p>
           </Reveal>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {themes.map((t, i) => (
               <Reveal key={t.name} delay={i * 0.05}>
                 <div className="glass overflow-hidden rounded-2xl p-4 transition-transform duration-300 hover:-translate-y-1">

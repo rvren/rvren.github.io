@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { Section } from "@/components/Section";
+import { cn } from "@/lib/utils";
 
 // Source is private; public macOS builds are published to rvren/cadence-releases.
 const RELEASES_URL = "https://github.com/rvren/cadence-releases/releases/latest";
@@ -302,35 +303,33 @@ export default function Cadence() {
                 transition={{ duration: 0.6, delay: 0.24 }}
                 className="mt-9 flex flex-wrap items-center gap-3"
               >
-                {/* Two explicit builds — you choose. Detection only highlights a
-                    guess so it can never auto-serve the wrong architecture. */}
+                {/* Both builds offered equally as direct downloads — a Mac can grab
+                    either. Detection only adds a subtle "yours" hint. */}
                 <a
                   href={armLink ?? RELEASES_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className={
-                    arch === "x64"
-                      ? "inline-flex items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium transition-colors hover:bg-secondary"
-                      : "group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-                  }
+                  className={cn(
+                    "group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5",
+                    arch === "arm64" && "ring-2 ring-accent ring-offset-2 ring-offset-background",
+                  )}
                 >
                   <AppleLogo className="h-4 w-4" />
-                  Apple Silicon
-                  {arch === "arm64" && <span className="opacity-70">· yours</span>}
+                  Apple&nbsp;Silicon
+                  {arch === "arm64" && <span className="opacity-80">· yours</span>}
                 </a>
                 <a
                   href={intelLink ?? RELEASES_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className={
-                    arch === "x64"
-                      ? "group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-                      : "inline-flex items-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-medium transition-colors hover:bg-secondary"
-                  }
+                  className={cn(
+                    "group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5",
+                    arch === "x64" && "ring-2 ring-accent ring-offset-2 ring-offset-background",
+                  )}
                 >
                   <AppleLogo className="h-4 w-4" />
                   Intel
-                  {arch === "x64" && <span className="opacity-70">· yours</span>}
+                  {arch === "x64" && <span className="opacity-80">· yours</span>}
                 </a>
                 <a
                   href="#features"

@@ -28,27 +28,45 @@ const LATEST_API = "https://api.github.com/repos/rvren/cadence-releases/releases
  * API. A universal build serves both architectures; falls back to the releases
  * page if the request fails or is rate-limited.
  */
-function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
-  const [links, setLinks] = useState<{ armLink?: string; intelLink?: string }>({});
+interface MacBuild {
+  name: string;
+  url: string;
+  size: number;
+  arch: string; // "Apple Silicon" | "Intel" | "Universal" | "macOS"
+}
+
+function archOf(name: string): string {
+  const n = name.toLowerCase();
+  if (n.includes("universal")) return "Universal";
+  if (n.includes("arm64") || n.includes("aarch64")) return "Apple Silicon";
+  if (n.includes("x64") || n.includes("x86") || n.includes("intel")) return "Intel";
+  return "macOS";
+}
+
+function useLatestMacDownloads(): { armLink?: string; intelLink?: string; builds: MacBuild[]; version?: string } {
+  const [state, setState] = useState<{ armLink?: string; intelLink?: string; builds: MacBuild[]; version?: string }>({
+    builds: [],
+  });
   useEffect(() => {
     let alive = true;
     fetch(LATEST_API)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error("release lookup failed"))))
-      .then((rel: { assets?: { name: string; browser_download_url: string }[] }) => {
-        if (!alive) return;
-        let arm: string | undefined;
-        let intel: string | undefined;
-        let universal: string | undefined;
-        for (const a of rel.assets ?? []) {
-          const n = a.name.toLowerCase();
-          if (!n.endsWith(".dmg")) continue;
-          if (n.includes("universal")) universal = a.browser_download_url;
-          else if (n.includes("arm64") || n.includes("aarch64")) arm = a.browser_download_url;
-          else if (n.includes("x64") || n.includes("x86") || n.includes("intel"))
-            intel = a.browser_download_url;
-        }
-        setLinks({ armLink: universal ?? arm, intelLink: universal ?? intel });
-      })
+      .then(
+        (rel: {
+          tag_name?: string;
+          assets?: { name: string; browser_download_url: string; size: number }[];
+        }) => {
+          if (!alive) return;
+          // Every .dmg installer, Apple Silicon listed first.
+          const builds: MacBuild[] = (rel.assets ?? [])
+            .filter((a) => a.name.toLowerCase().endsWith(".dmg"))
+            .map((a) => ({ name: a.name, url: a.browser_download_url, size: a.size, arch: archOf(a.name) }))
+            .sort((a, b) => (a.arch === "Apple Silicon" ? -1 : b.arch === "Apple Silicon" ? 1 : 0));
+          const arm = builds.find((b) => b.arch === "Apple Silicon" || b.arch === "Universal")?.url;
+          const intel = builds.find((b) => b.arch === "Intel" || b.arch === "Universal")?.url;
+          setState({ armLink: arm, intelLink: intel, builds, version: rel.tag_name });
+        },
+      )
       .catch(() => {
         /* keep the releases-page fallback */
       });
@@ -56,7 +74,7 @@ function useLatestMacDownloads(): { armLink?: string; intelLink?: string } {
       alive = false;
     };
   }, []);
-  return links;
+  return state;
 }
 
 /**
@@ -215,7 +233,7 @@ const browsers = ["Google Chrome", "Microsoft Edge", "Brave", "Arc", "Firefox", 
 
 export default function Cadence() {
   const reduce = useReducedMotion();
-  const { armLink, intelLink } = useLatestMacDownloads();
+  const { armLink, intelLink, builds } = useLatestMacDownloads();
   // Detection only highlights the likely build; both are always shown explicitly.
   const arch = useMacArch();
   return (
@@ -520,33 +538,45 @@ export default function Cadence() {
                     </>
                   )}
                 </p>
-                <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-                  <a
-                    href={armLink ?? RELEASES_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={
-                      arch === "x64"
-                        ? "inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
-                        : "group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-                    }
-                  >
-                    <AppleLogo className="h-4 w-4" />
-                    Apple Silicon
-                  </a>
-                  <a
-                    href={intelLink ?? RELEASES_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={
-                      arch === "x64"
-                        ? "group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5"
-                        : "inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium transition-colors hover:bg-secondary"
-                    }
-                  >
-                    <AppleLogo className="h-4 w-4" />
-                    Intel
-                  </a>
+                {/* Every build listed explicitly — no guessing. */}
+                <div className="mx-auto mt-7 max-w-md space-y-2 text-left">
+                  {(builds.length
+                    ? builds
+                    : [
+                        { name: "Apple Silicon (.dmg)", url: armLink ?? RELEASES_URL, size: 0, arch: "Apple Silicon" },
+                        { name: "Intel (.dmg)", url: intelLink ?? RELEASES_URL, size: 0, arch: "Intel" },
+                      ]
+                  ).map((b) => (
+                    <a
+                      key={b.name}
+                      href={b.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group flex items-center gap-3 rounded-xl border border-border bg-background/50 px-4 py-3 transition-colors hover:border-accent/50 hover:bg-secondary"
+                    >
+                      <AppleLogo className="h-5 w-5 shrink-0 text-muted-foreground" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium">
+                          {b.arch}
+                          {b.arch === "Apple Silicon" && (
+                            <span className="ml-1.5 font-normal text-muted-foreground">
+                              (M1–M5)
+                            </span>
+                          )}
+                        </span>
+                        <span className="block truncate font-mono text-[11px] text-muted-foreground">
+                          {b.name}
+                          {b.size ? ` · ${Math.round(b.size / 1048576)} MB` : ""}
+                        </span>
+                      </span>
+                      <span className="shrink-0 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+                        Download
+                      </span>
+                    </a>
+                  ))}
+                  <p className="pt-1 text-center text-[11px] text-muted-foreground">
+                    On Apple Silicon the Intel build also runs (via Rosetta).
+                  </p>
                 </div>
                 {(armLink || intelLink) && (
                   <p className="mt-4 text-xs text-muted-foreground">

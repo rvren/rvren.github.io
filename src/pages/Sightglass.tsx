@@ -99,17 +99,11 @@ export default function Sightglass() {
   }, []);
 
   return (
-    // The page scopes its own accent — the app's indigo, not the portfolio's
-    // amber — so the section numerals, icons and rules read as Sightglass.
-    <main
-      className="pb-24"
-      style={
-        {
-          "--accent": "239 84% 67%",
-          "--ring": "239 84% 67%",
-        } as React.CSSProperties
-      }
-    >
+    // The page scopes its own accent — Tanzanite, the app's, not the
+    // portfolio's amber — so the section numerals, icons and rules read as
+    // Sightglass. Defined in index.css rather than inline: it needs a light and
+    // a dark value, which an inline style cannot express.
+    <main className="theme-sightglass pb-24">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="grain relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.5] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />

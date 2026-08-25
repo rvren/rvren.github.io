@@ -77,6 +77,19 @@
 
 @layer utilities {
   /* Faint ruled-grid backdrop */
+  /* Sightglass's brand accent — Tanzanite, matched to the app's scheme of the
+     same name. Two values because one lightness cannot serve both grounds:
+     the dark-mode value sits near 3:1 on white, too low for the small
+     numerals and labels this drives. */
+  .theme-sightglass {
+    --accent: 252 74% 50%;
+    --ring: 252 74% 50%;
+  }
+  .dark .theme-sightglass {
+    --accent: 252 88% 72%;
+    --ring: 252 88% 72%;
+  }
+
   .bg-grid {
     background-image:
       linear-gradient(to right, hsl(var(--grid-line) / 0.6) 1px, transparent 1px),

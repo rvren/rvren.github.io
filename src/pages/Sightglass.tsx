@@ -99,14 +99,29 @@ export default function Sightglass() {
   }, []);
 
   return (
-    <main className="pb-24">
+    // The page scopes its own accent — the app's indigo, not the portfolio's
+    // amber — so the section numerals, icons and rules read as Sightglass.
+    <main
+      className="pb-24"
+      style={
+        {
+          "--accent": "239 84% 67%",
+          "--ring": "239 84% 67%",
+        } as React.CSSProperties
+      }
+    >
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-3xl px-6 pt-28 sm:pt-36">
+      <section className="grain relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.5] [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
+        <div className="pointer-events-none absolute -top-40 left-1/4 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl mask-radial" />
+
         <motion.div
+          className="container relative grid items-center gap-14 pt-32 sm:pt-40 lg:grid-cols-[1.05fr_0.95fr]"
           initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
+          <div>
           <img
             src="/sightglass-icon.png"
             alt=""
@@ -122,7 +137,7 @@ export default function Sightglass() {
             {product.tagline}
           </p>
 
-          <p className="mt-7 max-w-2xl text-[1.0625rem] leading-relaxed text-foreground/90">
+          <p className="mt-7 max-w-[46ch] text-[1.0625rem] leading-relaxed text-foreground/90">
             {product.summary}
           </p>
 
@@ -141,13 +156,16 @@ export default function Sightglass() {
             {product.platform}
             {version ? ` · ${version}` : ""} · free
           </p>
+          </div>
+
+          <ScoreRing />
         </motion.div>
       </section>
 
       {/* ── The premise ──────────────────────────────────────────────────── */}
-      <Section id="why" index="01" title="Why it exists">
+      <Section className="container" id="why" index="01" title="Why it exists">
         <Reveal>
-          <div className="max-w-2xl space-y-4 text-[1.0625rem] leading-relaxed text-foreground/90">
+          <div className="max-w-[62ch] space-y-4 text-[1.0625rem] leading-relaxed text-foreground/90">
             {premise.map((p) => (
               <p key={p}>{p}</p>
             ))}
@@ -162,7 +180,7 @@ export default function Sightglass() {
       </Section>
 
       {/* ── The screens ──────────────────────────────────────────────────── */}
-      <Section id="screens" index="02" title="What's inside">
+      <Section className="container" id="screens" index="02" title="What's inside">
         <Reveal>
           <p className="mb-8 max-w-2xl text-muted-foreground">
             Ten screens. Each one answers a question you'd otherwise guess at.
@@ -188,7 +206,7 @@ export default function Sightglass() {
       </Section>
 
       {/* ── The metrics, each with what it won't claim ───────────────────── */}
-      <Section id="metrics" index="03" title="Numbers you can trust">
+      <Section className="container" id="metrics" index="03" title="Numbers you can trust">
         <Reveal>
           <p className="mb-8 max-w-2xl text-muted-foreground">
             Four signature reads. Each one ships with the thing it deliberately
@@ -213,7 +231,7 @@ export default function Sightglass() {
       </Section>
 
       {/* ── Privacy, as a boundary rather than a promise ─────────────────── */}
-      <Section id="privacy" index="04" title="Where your data is">
+      <Section className="container" id="privacy" index="04" title="Where your data is">
         <Reveal>
           <div className="grid gap-8 sm:grid-cols-2">
             <div className="rounded-xl border border-border bg-card/40 p-6">
@@ -262,7 +280,7 @@ export default function Sightglass() {
       </Section>
 
       {/* ── Skins ────────────────────────────────────────────────────────── */}
-      <Section id="skins" index="05" title="Seven looks">
+      <Section className="container" id="skins" index="05" title="Seven looks">
         <Reveal>
           <p className="mb-8 max-w-2xl text-muted-foreground">
             One visual language with a handful of moods — not a gallery of
@@ -285,7 +303,7 @@ export default function Sightglass() {
       </Section>
 
       {/* ── Download ─────────────────────────────────────────────────────── */}
-      <Section id="download" index="06" title={`Get ${product.name}`}>
+      <Section className="container" id="download" index="06" title={`Get ${product.name}`}>
         <Reveal>
           <div className="rounded-2xl border border-border bg-card/40 p-8">
             <img
@@ -343,12 +361,50 @@ export default function Sightglass() {
         </Reveal>
       </Section>
 
-      <footer className="mx-auto mt-20 max-w-3xl px-6 text-xs text-muted-foreground">
+      <footer className="container mt-20 text-xs text-muted-foreground">
         <span className="font-mono">
           {product.name} · a local-first desktop app
         </span>
       </footer>
     </main>
+  );
+}
+
+/**
+ * The hero's one visual: the app's own headline number, drawn the way the app
+ * draws it. A sample day (78) rather than live data — this is a landing page,
+ * not a dashboard, and it says so by being a fixed, plausible reading.
+ */
+function ScoreRing() {
+  const reduce = useReducedMotion();
+  const r = 82;
+  const c = 2 * Math.PI * r;
+  const progress = 0.78;
+  return (
+    <div className="relative mx-auto grid aspect-square w-full max-w-[300px] place-items-center">
+      <svg viewBox="0 0 200 200" className="h-full w-full -rotate-90">
+        <circle cx="100" cy="100" r={r} fill="none" stroke="hsl(var(--border))" strokeWidth="6" />
+        <motion.circle
+          cx="100"
+          cy="100"
+          r={r}
+          fill="none"
+          stroke="hsl(var(--accent))"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeDasharray={c}
+          initial={reduce ? false : { strokeDashoffset: c }}
+          animate={{ strokeDashoffset: c * (1 - progress) }}
+          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </svg>
+      <div className="absolute flex max-w-[62%] flex-col items-center text-center">
+        <span className="font-mono text-6xl font-semibold leading-none tracking-tight">78</span>
+        <span className="mt-1.5 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          Sightglass Score
+        </span>
+      </div>
+    </div>
   );
 }
 

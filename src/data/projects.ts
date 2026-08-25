@@ -11,14 +11,14 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    name: "Cadence",
-    tagline: "Your daily focus rhythm.",
+    name: "Sightglass",
+    tagline: "See where your attention goes.",
     description:
-      "A local-first desktop app that pairs a Pomodoro focus timer with digital-wellbeing insights drawn from your own browser history. Everything runs on your machine — nothing is ever uploaded.",
-    tags: ["Electron", "React", "TypeScript", "Local-first", "macOS"],
-    href: "/cadence",
+      "A local-first macOS app that puts a focus timer and your own browsing, app and calendar history in one place — ten screens, sixty-odd features, every number computed on your machine. No account, no telemetry, nothing uploaded.",
+    tags: ["Electron", "React", "TypeScript", "SQLite", "Local-first", "macOS"],
+    href: "/sightglass",
     internal: true,
-    cta: "Explore Cadence",
+    cta: "Explore Sightglass",
     year: "2026",
   },
   {

@@ -4,7 +4,7 @@ Personal site of **Renjith Rajendran Viswalekshmi** — Frontend Engineering Lea
 Built with React + Vite + TypeScript, Tailwind, and framer-motion. Served at the
 root user-site URL **https://rvren.github.io**.
 
-Includes a standalone product page for **Cadence** (`/cadence`) and links to the
+Includes a standalone product page for **Sightglass** (`/sightglass`) and links to the
 live **BuildBoard** app.
 
 ## Development
@@ -21,4 +21,4 @@ npm run preview  # preview the production build locally
 Pushing to `main` triggers the GitHub Actions workflow in
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the app
 and publishes `dist/` to GitHub Pages. The build copies `index.html` to `404.html`
-so client-side routes (e.g. `/cadence`) resolve on direct hits and refreshes.
+so client-side routes (e.g. `/sightglass`) resolve on direct hits and refreshes.

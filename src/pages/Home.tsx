@@ -13,6 +13,7 @@ import { projects } from "@/data/projects";
 const intro = [
   "I’m a frontend engineering leader with 14+ years building production UIs and 4+ years managing teams — equally at home as a Staff/Principal IC or an engineering manager.",
   "Most recently I led the React/TypeScript console for Rafay’s GPU PaaS — the product behind the company’s growth — and architected the design system that replaced Material UI across the company. I also built a Claude-native frontend repo that lets non-engineers ship UI via prompts, and run a distributed 7-person team across the US and India.",
+  "Outside that I ship desktop software: Sightglass, a local-first macOS app that reads your own browsing, app and calendar history and tells you something true about your day — ten screens, everything computed on your machine.",
 ];
 
 const contact = [
@@ -62,16 +63,31 @@ export default function Home() {
         <div className="-mt-1">
           {projects.map((p) => {
             const body = (
-              <div className="group flex items-start justify-between gap-4 border-t border-border py-5">
-                <div>
-                  <h3 className="font-display text-lg font-medium transition-colors group-hover:text-accent">
-                    {p.name}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {p.description}
-                  </p>
+              <div className="group border-t border-border py-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="font-display text-lg font-medium transition-colors group-hover:text-accent">
+                      {p.name}
+                      <span className="ml-2 font-sans text-sm font-normal text-muted-foreground">
+                        {p.tagline}
+                      </span>
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {p.description}
+                    </p>
+                  </div>
+                  <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </div>
-                <ArrowUpRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                <ul className="mt-3 flex flex-wrap gap-x-2 gap-y-1.5">
+                  {p.tags.map((t) => (
+                    <li
+                      key={t}
+                      className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground"
+                    >
+                      {t}
+                    </li>
+                  ))}
+                </ul>
               </div>
             );
             return p.internal ? (

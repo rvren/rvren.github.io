@@ -8,7 +8,7 @@ export function Nav() {
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       {/* Match each page's content width so the toggle aligns with the content's
-          right edge: home is a narrow column, Cadence uses the wider container. */}
+          right edge: home is a narrow column, the product page uses the wider container. */}
       <div
         className={
           onHome

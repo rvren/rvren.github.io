@@ -1,176 +1,235 @@
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import {
-  awards,
-  education,
-  experience,
-  languages,
-  profile,
-  skills,
-} from "@/data/resume";
+  SiClaude,
+  SiCursor,
+  SiCypress,
+  SiDocker,
+  SiElectron,
+  SiFigma,
+  SiGit,
+  SiJavascript,
+  SiMui,
+  SiReact,
+  SiRedux,
+  SiShadcnui,
+  SiStorybook,
+  SiTailwindcss,
+  SiTypescript,
+  SiVite,
+  SiWebpack,
+} from "react-icons/si";
+import type { IconType } from "react-icons";
+import { Link } from "react-router-dom";
+import { education, experience, profile } from "@/data/resume";
 import { projects } from "@/data/projects";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
-const intro = [
-  "I’m a frontend engineering leader with 14+ years building production UIs and 4+ years managing teams — equally at home as a Staff/Principal IC or an engineering manager.",
-  "Most recently I led the React/TypeScript console for Rafay’s GPU PaaS — the product behind the company’s growth — and architected the design system that replaced Material UI across the company. I also built a Claude-native frontend repo that lets non-engineers ship UI via prompts, and run a distributed 7-person team across the US and India.",
-  "Outside that I ship desktop software: Sightglass, a local-first macOS app that reads your own browsing, app and calendar history and tells you something true about your day — ten screens, everything computed on your machine.",
+const tech: { name: string; Icon: IconType; color: string }[] = [
+  { name: "React", Icon: SiReact, color: "#61DAFB" },
+  { name: "TypeScript", Icon: SiTypescript, color: "#3178C6" },
+  { name: "Electron", Icon: SiElectron, color: "#47848F" },
+  { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
+  { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#06B6D4" },
+  { name: "shadcn/ui", Icon: SiShadcnui, color: "currentColor" },
+  { name: "Material UI", Icon: SiMui, color: "#007FFF" },
+  { name: "Redux", Icon: SiRedux, color: "#764ABC" },
+  { name: "Storybook", Icon: SiStorybook, color: "#FF4785" },
+  { name: "Cypress", Icon: SiCypress, color: "#69D3A7" },
+  { name: "Vite", Icon: SiVite, color: "#646CFF" },
+  { name: "Webpack", Icon: SiWebpack, color: "#1C78C0" },
+  { name: "Docker", Icon: SiDocker, color: "#2496ED" },
+  { name: "Figma", Icon: SiFigma, color: "#F24E1E" },
+  { name: "Git", Icon: SiGit, color: "#F05032" },
+  { name: "Claude", Icon: SiClaude, color: "#D97757" },
+  { name: "Cursor", Icon: SiCursor, color: "currentColor" },
 ];
 
-const contact = [
-  { label: "Email", href: `mailto:${profile.email}` },
-  { label: "LinkedIn", href: profile.linkedin },
-  { label: "GitHub", href: profile.github },
-  { label: "Résumé", href: profile.resumeUrl },
-];
+const projectVisual: Record<string, { icon: string; from: string; to: string }> = {
+  Sightglass: { icon: "/sightglass-icon.svg", from: "#4f46e5", to: "#7c3aed" },
+  BuildBoard: { icon: "/buildboard-icon.svg", from: "#059669", to: "#0ea371" },
+};
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-2xl px-6 pb-24 pt-28 sm:pt-32">
-      {/* Intro */}
-      <section className="animate-fade-up">
-        <p className="font-mono text-[0.7rem] uppercase tracking-[0.22em] text-muted-foreground">
-          {profile.title}
-        </p>
-        <h1 className="mt-5 font-display text-[2.5rem] font-medium leading-[1.05] sm:text-[3.25rem]">
-          {profile.name}
-        </h1>
-        <p className="mt-3 text-muted-foreground">{profile.location}</p>
+    <main className="mx-auto max-w-2xl px-6 pb-24 pt-10 sm:pt-16">
+      {/* Header */}
+      <header className="mb-14 flex items-center justify-between sm:mb-20">
+        <span className="font-mono text-sm font-medium tracking-tight text-foreground">
+          <span className="text-accent">//</span> RRV
+        </span>
+        <ThemeToggle />
+      </header>
 
-        <div className="mt-8 space-y-4 leading-relaxed text-foreground/90">
-          {intro.map((p) => (
-            <p key={p}>{p}</p>
-          ))}
+      {/* Hero */}
+      <section className="animate-fade-up">
+        <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight sm:text-[2.6rem] sm:leading-[1.08]">
+          Hey, I’m <span className="text-accent">Renjith</span>{" "}
+          <span className="inline-block origin-[70%_80%] animate-wave">👋</span>
+        </h1>
+        <div className="mt-6 space-y-2 text-lg leading-relaxed text-muted-foreground">
+          <p>
+            A frontend engineering leader based in{" "}
+            <span className="text-foreground">Sunnyvale, CA</span>.
+          </p>
+          <p>
+            I build production UIs, design systems, and{" "}
+            <span className="text-foreground">AI-native developer tooling</span>{" "}
+            — most recently the React/TypeScript console behind Rafay’s GPU
+            cloud.
+          </p>
+          <p>On the side I ship local-first Mac apps. If you’re building
+            something ambitious, I’d love to help.</p>
         </div>
 
-        <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-          {contact.map((c) => (
-            <li key={c.label}>
-              <a
-                href={c.href}
-                target={c.href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
-              >
-                {c.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <p className="mt-8 flex items-center gap-2.5 text-sm text-muted-foreground">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/70" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+          Leading frontend at Rafay — always open to interesting problems.
+        </p>
+
+        <div className="mt-4 flex gap-5 text-sm">
+          <a
+            href={profile.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            className="text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
+          >
+            LinkedIn
+          </a>
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noreferrer"
+            className="text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
+          >
+            GitHub
+          </a>
+        </div>
       </section>
 
-      {/* Building */}
-      <Block label="Building">
-        <div className="-mt-1">
+      {/* Tech stack */}
+      <Section
+        label="Tech stack"
+        intro="The tools I reach for, day to day:"
+        delay={80}
+      >
+        <div className="flex flex-wrap gap-2">
+          {tech.map(({ name, Icon, color }) => (
+            <span
+              key={name}
+              style={{ "--c": color } as React.CSSProperties}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1.5 text-sm text-foreground/90 transition-all duration-200 hover:-translate-y-0.5 hover:bg-card/80 hover:[border-color:var(--c)]"
+            >
+              <Icon size={15} color={color} aria-hidden />
+              {name}
+            </span>
+          ))}
+        </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Plus AI-native workflows — Claude agents, repo-level skills, and a
+          sandbox-to-PR pipeline.
+        </p>
+      </Section>
+
+      {/* Projects */}
+      <Section
+        label="Projects"
+        intro="Things I’ve designed and shipped — past and ongoing:"
+        delay={160}
+      >
+        <div className="grid gap-5 sm:grid-cols-2">
           {projects.map((p) => {
-            const body = (
-              <div className="group border-t border-border py-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="font-display text-lg font-medium transition-colors group-hover:text-accent">
-                      {p.name}
-                      <span className="ml-2 font-sans text-sm font-normal text-muted-foreground">
-                        {p.tagline}
-                      </span>
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      {p.description}
-                    </p>
-                  </div>
-                  <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-all group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            const v = projectVisual[p.name] ?? {
+              icon: "/favicon.svg",
+              from: "#334155",
+              to: "#0f172a",
+            };
+            const card = (
+              <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/40 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-[0_24px_60px_-24px_rgba(20,20,40,0.45)]">
+                <div
+                  className="relative flex h-32 items-center justify-center"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, ${v.from}, ${v.to})`,
+                  }}
+                >
+                  <div className="pointer-events-none absolute inset-0 opacity-50 [background:radial-gradient(circle_at_28%_18%,rgba(255,255,255,0.45),transparent_58%)]" />
+                  <img
+                    src={v.icon}
+                    alt=""
+                    className="relative h-16 w-16 rounded-[18px] shadow-lg ring-1 ring-black/10 transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
-                <ul className="mt-3 flex flex-wrap gap-x-2 gap-y-1.5">
-                  {p.tags.map((t) => (
-                    <li
-                      key={t}
-                      className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground"
-                    >
-                      {t}
-                    </li>
-                  ))}
-                </ul>
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="font-display text-lg font-medium">{p.name}</h3>
+                  <p className="text-sm text-accent">{p.tagline}</p>
+                  <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                    {p.description}
+                  </p>
+                  <ul className="mt-4 flex flex-wrap gap-x-2 gap-y-1.5">
+                    {p.tags.slice(0, 4).map((t) => (
+                      <li
+                        key={t}
+                        className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground"
+                      >
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
+                    {p.cta}
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
+                </div>
               </div>
             );
             return p.internal ? (
-              <Link key={p.name} to={p.href}>
-                {body}
+              <Link key={p.name} to={p.href} className="block h-full">
+                {card}
               </Link>
             ) : (
-              <a key={p.name} href={p.href} target="_blank" rel="noreferrer">
-                {body}
+              <a
+                key={p.name}
+                href={p.href}
+                target="_blank"
+                rel="noreferrer"
+                className="block h-full"
+              >
+                {card}
               </a>
             );
           })}
         </div>
-      </Block>
+      </Section>
 
       {/* Experience */}
-      <Block label="Experience">
-        <div className="space-y-9">
+      <Section label="Experience" intro="Where I’ve worked:" delay={240}>
+        <div className="-mt-2">
           {experience.map((role) => (
-            <article key={`${role.company}-${role.period}`}>
-              <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                <h3 className="font-display text-base font-medium">
-                  {role.title}
-                  <span className="text-muted-foreground"> · {role.company}</span>
-                </h3>
-                <span className="shrink-0 font-mono text-xs text-muted-foreground">
-                  {role.period}
-                </span>
-              </div>
-              <ul className="mt-3 space-y-1.5">
-                {role.bullets.map((b, i) => (
-                  <li
-                    key={i}
-                    className="flex gap-2.5 text-sm leading-relaxed text-muted-foreground"
-                  >
-                    <span className="select-none text-border">—</span>
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </Block>
-
-      {/* Skills */}
-      <Block label="Skills">
-        <dl className="text-sm">
-          {skills.map((s) => (
             <div
-              key={s.group}
-              className="grid grid-cols-1 gap-1 border-t border-border py-3 sm:grid-cols-[8rem_1fr] sm:gap-4"
+              key={`${role.company}-${role.period}`}
+              className="flex flex-col gap-0.5 border-t border-border py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
             >
-              <dt className="text-muted-foreground">{s.group}</dt>
-              <dd className="text-foreground/90">{s.items.join(", ")}</dd>
+              <h3 className="text-[0.95rem] font-medium">
+                {role.title}
+                <span className="text-muted-foreground"> · {role.company}</span>
+              </h3>
+              <span className="shrink-0 font-mono text-xs text-muted-foreground">
+                {role.period}
+              </span>
             </div>
           ))}
-        </dl>
-      </Block>
-
-      {/* Details */}
-      <Block label="Details">
-        <div className="space-y-6 text-sm">
-          <div>
-            <p className="font-medium">{education.degree}</p>
-            <p className="text-muted-foreground">
-              {education.school} · {education.period}
-            </p>
-          </div>
-          <div>
-            <p className="mb-1.5 text-muted-foreground">Awards & certifications</p>
-            <ul className="space-y-1 text-foreground/90">
-              {awards.map((a) => (
-                <li key={a}>{a}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="mb-1.5 text-muted-foreground">Languages</p>
-            <p className="text-foreground/90">{languages.join(" · ")}</p>
-          </div>
         </div>
-      </Block>
+      </Section>
+
+      {/* Education */}
+      <Section label="Education" delay={320}>
+        <p className="font-medium">{education.degree}</p>
+        <p className="text-sm text-muted-foreground">
+          {education.school} · {education.period}
+        </p>
+      </Section>
 
       <footer className="mt-20 border-t border-border pt-6 text-xs text-muted-foreground">
         © 2026 {profile.name} ·{" "}
@@ -185,19 +244,27 @@ export default function Home() {
   );
 }
 
-function Block({
+function Section({
   label,
+  intro,
   children,
+  delay = 0,
 }: {
   label: string;
+  intro?: string;
   children: React.ReactNode;
+  delay?: number;
 }) {
   return (
-    <section className="mt-16">
-      <h2 className="mb-6 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+    <section
+      className="mt-16 animate-fade-up"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
         {label}
-      </h2>
-      {children}
+      </p>
+      {intro && <p className="mt-3 text-muted-foreground">{intro}</p>}
+      <div className="mt-6">{children}</div>
     </section>
   );
 }

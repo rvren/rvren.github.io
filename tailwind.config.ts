@@ -62,10 +62,18 @@ export default {
           "0%": { backgroundPosition: "200% 0" },
           "100%": { backgroundPosition: "-200% 0" },
         },
+        wave: {
+          "0%, 60%, 100%": { transform: "rotate(0deg)" },
+          "10%, 30%": { transform: "rotate(14deg)" },
+          "20%": { transform: "rotate(-8deg)" },
+          "40%": { transform: "rotate(-4deg)" },
+          "50%": { transform: "rotate(10deg)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
         shimmer: "shimmer 8s linear infinite",
+        wave: "wave 2.4s ease-in-out 1s infinite",
       },
     },
   },

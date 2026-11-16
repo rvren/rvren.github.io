@@ -1,0 +1,44 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ring" x1="230" y1="200" x2="820" y2="840" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2BE38A"/>
+      <stop offset="1" stop-color="#10C9B4"/>
+    </linearGradient>
+    <radialGradient id="tile" cx="0.5" cy="0.42" r="0.75">
+      <stop stop-color="#0A2A24"/>
+      <stop offset="0.55" stop-color="#07171C"/>
+      <stop offset="1" stop-color="#040E12"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+      <stop stop-color="#1FE08A" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#1FE08A" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+  </defs>
+
+  <!-- rounded-square app tile -->
+  <rect x="80" y="80" width="864" height="864" rx="200" fill="url(#tile)"/>
+  <rect x="80.5" y="80.5" width="863" height="863" rx="199.5" fill="none" stroke="#3DF0A6" stroke-opacity="0.16" stroke-width="1.5"/>
+
+  <!-- soft central halo -->
+  <circle cx="512" cy="500" r="300" fill="url(#halo)"/>
+
+  <!-- glow copy of the ring -->
+  <g filter="url(#soft)" opacity="0.7">
+    <circle cx="512" cy="500" r="300" fill="none" stroke="url(#ring)" stroke-width="66"
+      stroke-linecap="round" stroke-dasharray="1414 471" stroke-dashoffset="245"/>
+  </g>
+
+  <!-- aperture: outer ring with opening -->
+  <circle cx="512" cy="500" r="300" fill="none" stroke="url(#ring)" stroke-width="66"
+    stroke-linecap="round" stroke-dasharray="1414 471" stroke-dashoffset="245"/>
+
+  <!-- inner offset arc -->
+  <circle cx="512" cy="500" r="165" fill="none" stroke="url(#ring)" stroke-width="56"
+    stroke-linecap="round" stroke-dasharray="545 491" stroke-dashoffset="-109" opacity="0.9"/>
+
+  <!-- center node -->
+  <circle cx="512" cy="500" r="58" fill="url(#ring)"/>
+</svg>

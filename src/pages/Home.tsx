@@ -1,270 +1,186 @@
-import { ArrowUpRight } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { DotField } from "@/components/DotField";
 import {
-  SiClaude,
-  SiCursor,
-  SiCypress,
-  SiDocker,
-  SiElectron,
-  SiFigma,
-  SiGit,
-  SiJavascript,
-  SiMui,
-  SiReact,
-  SiRedux,
-  SiShadcnui,
-  SiStorybook,
-  SiTailwindcss,
-  SiTypescript,
-  SiVite,
-  SiWebpack,
-} from "react-icons/si";
-import type { IconType } from "react-icons";
-import { Link } from "react-router-dom";
-import { education, experience, profile } from "@/data/resume";
-import { projects } from "@/data/projects";
-import { ThemeToggle } from "@/components/ThemeToggle";
-
-const tech: { name: string; Icon: IconType; color: string }[] = [
-  { name: "React", Icon: SiReact, color: "#61DAFB" },
-  { name: "TypeScript", Icon: SiTypescript, color: "#3178C6" },
-  { name: "Electron", Icon: SiElectron, color: "#47848F" },
-  { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
-  { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#06B6D4" },
-  { name: "shadcn/ui", Icon: SiShadcnui, color: "currentColor" },
-  { name: "Material UI", Icon: SiMui, color: "#007FFF" },
-  { name: "Redux", Icon: SiRedux, color: "#764ABC" },
-  { name: "Storybook", Icon: SiStorybook, color: "#FF4785" },
-  { name: "Cypress", Icon: SiCypress, color: "#69D3A7" },
-  { name: "Vite", Icon: SiVite, color: "#646CFF" },
-  { name: "Webpack", Icon: SiWebpack, color: "#1C78C0" },
-  { name: "Docker", Icon: SiDocker, color: "#2496ED" },
-  { name: "Figma", Icon: SiFigma, color: "#F24E1E" },
-  { name: "Git", Icon: SiGit, color: "#F05032" },
-  { name: "Claude", Icon: SiClaude, color: "#D97757" },
-  { name: "Cursor", Icon: SiCursor, color: "currentColor" },
-];
-
-const projectVisual: Record<string, { icon: string; from: string; to: string }> = {
-  Sightglass: { icon: "/sightglass-icon.svg", from: "#4f46e5", to: "#7c3aed" },
-  BuildBoard: { icon: "/buildboard-icon.svg", from: "#059669", to: "#0ea371" },
-};
+  brandStyle,
+  ContactLinks,
+  DetailsGrid,
+  ExperienceList,
+  Footer,
+  Kicker,
+  ProductActions,
+  ResumeCard,
+  ResumeDownload,
+  SectionHead,
+  StackList,
+  Tags,
+} from "@/components/home/parts";
+import { products } from "@/data/projects";
+import { highlights, intro, profile } from "@/data/resume";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
+  const [active, setActive] = useState(0);
+  const reduce = useReducedMotion();
+  const p = products[active];
+
   return (
-    <main className="mx-auto max-w-2xl px-6 pb-24 pt-10 sm:pt-16">
-      {/* Header */}
-      <header className="mb-14 flex items-center justify-between sm:mb-20">
-        <span className="font-mono text-sm font-medium tracking-tight text-foreground">
-          <span className="text-accent">//</span> RRV
-        </span>
-        <ThemeToggle />
-      </header>
-
-      {/* Hero */}
-      <section className="animate-fade-up">
-        <h1 className="font-display text-3xl font-semibold leading-tight tracking-tight sm:text-[2.6rem] sm:leading-[1.08]">
-          Hey, I’m <span className="text-accent">Renjith</span>{" "}
-          <span className="inline-block origin-[70%_80%] animate-wave">👋</span>
-        </h1>
-        <div className="mt-6 space-y-2 text-lg leading-relaxed text-muted-foreground">
-          <p>
-            A frontend engineering leader based in{" "}
-            <span className="text-foreground">Sunnyvale, CA</span>.
-          </p>
-          <p>
-            I build production UIs, design systems, and{" "}
-            <span className="text-foreground">AI-native developer tooling</span>{" "}
-            — most recently the React/TypeScript console behind Rafay’s GPU
-            cloud.
-          </p>
-          <p>On the side I ship local-first Mac apps. If you’re building
-            something ambitious, I’d love to help.</p>
-        </div>
-
-        <p className="mt-8 flex items-center gap-2.5 text-sm text-muted-foreground">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/70" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-          </span>
-          Leading frontend at Rafay — always open to interesting problems.
-        </p>
-
-        <div className="mt-4 flex gap-5 text-sm">
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
-          >
-            LinkedIn
-          </a>
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-            className="text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
-          >
-            GitHub
-          </a>
-        </div>
-      </section>
-
-      {/* Tech stack */}
-      <Section
-        label="Tech stack"
-        intro="The tools I reach for, day to day:"
-        delay={80}
+    <>
+      <DotField />
+      <main
+        id="top"
+        className="relative z-10 mx-auto max-w-5xl px-4 pb-16 pt-32 sm:px-6 sm:pt-40"
       >
-        <div className="flex flex-wrap gap-2">
-          {tech.map(({ name, Icon, color }) => (
-            <span
-              key={name}
-              style={{ "--c": color } as React.CSSProperties}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1.5 text-sm text-foreground/90 transition-all duration-200 hover:-translate-y-0.5 hover:bg-card/80 hover:[border-color:var(--c)]"
-            >
-              <Icon size={15} color={color} aria-hidden />
-              {name}
-            </span>
-          ))}
-        </div>
-        <p className="mt-4 text-sm text-muted-foreground">
-          Plus AI-native workflows — Claude agents, repo-level skills, and a
-          sandbox-to-PR pipeline.
-        </p>
-      </Section>
+        {/* Hero, centred */}
+        <section className="animate-fade-up text-center">
+          <Kicker className="uppercase tracking-[0.16em]">
+            {profile.title}
+            <span className="hidden sm:inline"> · {profile.location}</span>
+          </Kicker>
+          <h1 className="mx-auto mt-5 max-w-4xl font-display text-[2.6rem] font-light leading-[1] tracking-[-0.04em] sm:text-[4.4rem]">
+            Renjith Rajendran{" "}
+            <span className="text-muted-foreground">Viswalekshmi</span>
+          </h1>
+          <p className="mx-auto mt-7 max-w-2xl text-[1.02rem] leading-relaxed text-foreground/85">
+            {intro[0]}
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-5">
+            <ResumeDownload testId="hero-resume-download" />
+            <ContactLinks className="justify-center" />
+          </div>
+        </section>
 
-      {/* Projects */}
-      <Section
-        label="Projects"
-        intro="Things I’ve designed and shipped — past and ongoing:"
-        delay={160}
-      >
-        <div className="grid gap-5 sm:grid-cols-2">
-          {projects.map((p) => {
-            const v = projectVisual[p.name] ?? {
-              icon: "/favicon.svg",
-              from: "#334155",
-              to: "#0f172a",
-            };
-            const card = (
-              <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/40 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-[0_24px_60px_-24px_rgba(20,20,40,0.45)]">
-                <div
-                  className="relative flex h-32 items-center justify-center"
-                  style={{
-                    backgroundImage: `linear-gradient(135deg, ${v.from}, ${v.to})`,
-                  }}
+        {/* The shelf: every product as an app icon; picking one opens it below */}
+        <section id="products" className="mt-24 scroll-mt-24">
+          <p className="text-center font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted-foreground">
+            {intro[2]}
+          </p>
+          <div
+            role="tablist"
+            aria-label="Products"
+            className="mx-auto mt-6 flex w-fit max-w-full items-end gap-1 overflow-x-auto rounded-[26px] border border-border bg-card/80 px-3 pb-3 pt-4 backdrop-blur sm:gap-4 sm:px-5"
+          >
+            {products.map((item, i) => {
+              const on = i === active;
+              return (
+                <button
+                  key={item.name}
+                  role="tab"
+                  type="button"
+                  aria-selected={on}
+                  data-testid={`shelf-${item.name.toLowerCase()}-tab`}
+                  onClick={() => setActive(i)}
+                  style={brandStyle(item)}
+                  className="group flex w-[3.6rem] shrink-0 flex-col items-center gap-2 sm:w-20"
                 >
-                  <div className="pointer-events-none absolute inset-0 opacity-50 [background:radial-gradient(circle_at_28%_18%,rgba(255,255,255,0.45),transparent_58%)]" />
-                  <img
-                    src={v.icon}
+                  <motion.img
+                    src={item.icon}
                     alt=""
-                    className="relative h-16 w-16 rounded-[18px] shadow-lg ring-1 ring-black/10 transition-transform duration-300 group-hover:scale-105"
+                    whileHover={reduce ? undefined : { y: -8, scale: 1.12 }}
+                    animate={{ y: on ? -6 : 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                    className={cn(
+                      "h-12 w-12 rounded-[14px] sm:h-16 sm:w-16 sm:rounded-[16px]",
+                      on && "shadow-[0_14px_36px_-10px_var(--brand)]",
+                    )}
                   />
-                </div>
-                <div className="flex flex-1 flex-col p-5">
-                  <h3 className="font-display text-lg font-medium">{p.name}</h3>
-                  <p className="text-sm text-accent">{p.tagline}</p>
-                  <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  <span
+                    className={cn(
+                      "text-[0.7rem] transition-colors",
+                      on
+                        ? "text-foreground"
+                        : "text-muted-foreground group-hover:text-foreground",
+                    )}
+                  >
+                    {item.name}
+                  </span>
+                  <span
+                    className={cn(
+                      "h-1 w-1 rounded-full transition-opacity",
+                      on ? "opacity-100" : "opacity-0",
+                    )}
+                    style={{ background: "var(--brand)" }}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="relative mt-6" style={brandStyle(p)}>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.article
+                key={p.name}
+                role="tabpanel"
+                initial={reduce ? false : { opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduce ? undefined : { opacity: 0, y: -8 }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                className="relative grid gap-8 overflow-hidden rounded-[26px] border border-[color:color-mix(in_srgb,var(--brand)_45%,transparent)] bg-card/90 p-7 backdrop-blur sm:p-10 md:grid-cols-[1fr_15rem]"
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-32 -right-20 h-80 w-80 rounded-full opacity-20 blur-3xl"
+                  style={{ background: "var(--brand)" }}
+                />
+                <div className="relative">
+                  <Kicker>{p.kicker}</Kicker>
+                  <h3 className="mt-2 font-display text-[2.6rem] font-light leading-none tracking-[-0.04em] sm:text-[3.4rem]">
+                    {p.name}
+                  </h3>
+                  <p className="mt-3 text-lg text-foreground/85">{p.tagline}</p>
+                  <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
                     {p.description}
                   </p>
-                  <ul className="mt-4 flex flex-wrap gap-x-2 gap-y-1.5">
-                    {p.tags.slice(0, 4).map((t) => (
-                      <li
-                        key={t}
-                        className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground"
-                      >
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-foreground transition-colors group-hover:text-accent">
-                    {p.cta}
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
+                  <div className="mt-7">
+                    <ProductActions product={p} />
+                  </div>
                 </div>
-              </div>
-            );
-            return p.internal ? (
-              <Link key={p.name} to={p.href} className="block h-full">
-                {card}
-              </Link>
-            ) : (
-              <a
-                key={p.name}
-                href={p.href}
-                target="_blank"
-                rel="noreferrer"
-                className="block h-full"
-              >
-                {card}
-              </a>
-            );
-          })}
-        </div>
-      </Section>
+                <div className="relative flex flex-col items-start gap-5 md:items-end">
+                  <img
+                    src={p.icon}
+                    alt=""
+                    className="hidden h-28 w-28 rounded-[28px] md:block"
+                  />
+                  <Tags items={p.tags} className="md:justify-end" />
+                </div>
+              </motion.article>
+            </AnimatePresence>
+          </div>
+        </section>
 
-      {/* Experience */}
-      <Section label="Experience" intro="Where I’ve worked:" delay={240}>
-        <div className="-mt-2">
-          {experience.map((role) => (
-            <div
-              key={`${role.company}-${role.period}`}
-              className="flex flex-col gap-0.5 border-t border-border py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
-            >
-              <h3 className="text-[0.95rem] font-medium">
-                {role.title}
-                <span className="text-muted-foreground"> · {role.company}</span>
-              </h3>
-              <span className="shrink-0 font-mono text-xs text-muted-foreground">
-                {role.period}
-              </span>
+        <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
+          {highlights.map((h) => (
+            <div key={h.label} className="bg-card/90 p-5 backdrop-blur">
+              <dt className="font-display text-2xl font-light tracking-tight">
+                {h.stat}
+              </dt>
+              <dd className="mt-1 text-xs leading-snug text-muted-foreground">
+                {h.label}
+              </dd>
             </div>
           ))}
+        </dl>
+
+        <div className="mx-auto max-w-[46rem]">
+          <section id="experience" className="mt-24 scroll-mt-24">
+            <SectionHead index="01" label="Experience" />
+            <p className="-mt-2 mb-8 text-sm leading-relaxed text-muted-foreground">
+              {intro[1]}
+            </p>
+            <ExperienceList />
+          </section>
+          <section className="mt-24">
+            <SectionHead index="02" label="Stack" />
+            <StackList />
+          </section>
+          <section className="mt-24">
+            <SectionHead index="03" label="Details" />
+            <DetailsGrid />
+          </section>
+          <ResumeCard className="mt-20" />
+          <Footer />
         </div>
-      </Section>
-
-      {/* Education */}
-      <Section label="Education" delay={320}>
-        <p className="font-medium">{education.degree}</p>
-        <p className="text-sm text-muted-foreground">
-          {education.school} · {education.period}
-        </p>
-      </Section>
-
-      <footer className="mt-20 border-t border-border pt-6 text-xs text-muted-foreground">
-        © 2026 {profile.name} ·{" "}
-        <a
-          href={`mailto:${profile.email}`}
-          className="underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
-        >
-          {profile.email}
-        </a>
-      </footer>
-    </main>
-  );
-}
-
-function Section({
-  label,
-  intro,
-  children,
-  delay = 0,
-}: {
-  label: string;
-  intro?: string;
-  children: React.ReactNode;
-  delay?: number;
-}) {
-  return (
-    <section
-      className="mt-16 animate-fade-up"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-        {label}
-      </p>
-      {intro && <p className="mt-3 text-muted-foreground">{intro}</p>}
-      <div className="mt-6">{children}</div>
-    </section>
+      </main>
+    </>
   );
 }

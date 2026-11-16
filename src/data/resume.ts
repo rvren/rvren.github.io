@@ -1,44 +1,33 @@
+// Sourced from public/resume.pdf (Renjith_Viswalekshmi_Resume.pdf, Oct 2026). When the
+// résumé changes, replace the PDF and reconcile this file against it.
+
 export const profile = {
   name: "Renjith Rajendran Viswalekshmi",
   shortName: "Renjith Rajendran",
   title: "Frontend Engineering Leader",
-  subtitle: "Design Systems · AI-Native Developer Tooling",
+  subtitle: "Engineering Manager · Frontend Architecture · Design Systems",
   location: "Sunnyvale, CA",
   email: "rv.renjith2@gmail.com",
   linkedin: "https://linkedin.com/in/rvrenjith",
   github: "https://github.com/rvren",
   resumeUrl: "/resume.pdf",
-  tagline:
-    "Frontend engineering leader with 14+ years building production UIs and 4+ years managing teams — equally at home as a Staff/Principal IC or an Engineering Manager.",
-  summary:
-    "Most recently led the React/TypeScript console for Rafay’s GPU PaaS — the product behind the company’s growth, demoed at NVIDIA GTC and the India AI Summit by GPU-datacenter customers running on Rafay. Architected the design system that replaced Material UI across the company, built a Claude-native frontend repo that lets non-engineers ship code via prompts, and runs a distributed 7-person UI organization across the US and India.",
+  resumeFileName: "Renjith_Viswalekshmi_Resume.pdf",
 };
 
-export const impact: { stat: string; label: string; detail: string }[] = [
+export const intro: string[] = [
+  "Frontend engineering leader with 14+ years building production web applications and 5 years leading frontend teams — hands-on architecture alongside people management.",
+  "At Rafay Systems I own the frontend for the GPU PaaS console for AI infrastructure, the product at the center of the company’s 182% ARR growth. I’ve set company-wide frontend standards twice, took the monorepo from no runnable tests to nearly 25,000, and built an AI-native workflow that lets people outside the frontend team ship reviewed UI code.",
+  "After hours I build products of my own — agent simulations, developer platforms and local-first desktop apps.",
+];
+
+export const highlights: { stat: string; label: string }[] = [
   {
-    stat: "GPU PaaS",
-    label: "Rafay’s growth console",
-    detail:
-      "The GPU PaaS console is the surface customers evaluate, buy, and operate the product through; demoed at NVIDIA GTC and the India AI Summit.",
+    stat: "182%",
+    label: "ARR growth, with the console at its center",
   },
-  {
-    stat: "Material UI → in-house",
-    label: "Design system replacement",
-    detail:
-      "Replaced Material UI across the console with an in-house React + Tailwind + shadcn/ui design system; now the standard for every Rafay product surface.",
-  },
-  {
-    stat: "Prompts → PRs",
-    label: "Agentic frontend repo",
-    detail:
-      "Authored repo-level Claude skills and a sandbox-to-PR workflow so PMs, designers, and support engineers ship UI changes via prompts.",
-  },
-  {
-    stat: "7 engineers",
-    label: "Distributed UI team",
-    detail:
-      "Across Sunnyvale and Bengaluru — hiring, performance, planning, and weekly delivery.",
-  },
+  { stat: "~25,000", label: "tests, from none, in under 6 weeks" },
+  { stat: "98%", label: "line coverage on core workspaces" },
+  { stat: "7", label: "engineers across the US and India" },
 ];
 
 export type Role = {
@@ -51,17 +40,16 @@ export type Role = {
 
 export const experience: Role[] = [
   {
-    title: "Engineering Manager",
+    title: "Engineering Manager, Frontend",
     company: "Rafay Systems",
     location: "Sunnyvale, CA",
     period: "Sep 2023 — Present",
     bullets: [
-      "Own the frontend for Rafay’s GPU PaaS — React/TypeScript console covering workflow orchestration, billing, and observability; the product central to the company’s growth and the demos at NVIDIA GTC and the India AI Summit.",
-      "Manage 7 UI engineers across Sunnyvale and Bengaluru: hiring, performance management, mentorship, sprint planning, and weekly delivery alignment with product.",
-      "Architected the React + Tailwind + shadcn/ui design system that replaced Material UI; unified visual language across the console, cut the legacy dependency footprint, and standardized component primitives for all new work.",
-      "Built a Claude-native workflow inside the frontend repos: standardized the code so agents can navigate it, authored repo-level skills, and shipped a sandbox that turns plain-English requirements into reviewable PRs — PMs, designers, and support engineers now ship UI changes directly.",
-      "Designed the React Flow-based authoring and visualization tools for AI-driven infrastructure workflows — the primary UX for building and running GPU jobs on Rafay.",
-      "Drove engineering quality across the codebase: led the JSX → TSX migration, grew test coverage, and put security and design guardrails in CI.",
+      "Own frontend architecture and direction for Rafay’s GPU PaaS — a React + TypeScript console for AI workflow orchestration, billing and observability, demoed at NVIDIA GTC and the India AI Summit.",
+      "Manage 7 frontend engineers across Sunnyvale and Bengaluru; hired 5, promoted 2.",
+      "Drove a React + Tailwind + shadcn/ui design system on Radix primitives that replaced Material UI on every Rafay product surface.",
+      "Built the testing platform: nearly 25,000 unit and component tests in under 6 weeks, a 312-test Playwright suite, and PR gates on changed-line coverage with a rising floor.",
+      "Made the repos AI-native — repo-level Claude Code skills and a sandbox that turns plain-English requirements into reviewable PRs for 6–8 PMs, designers and support engineers.",
     ],
   },
   {
@@ -70,11 +58,8 @@ export const experience: Role[] = [
     location: "Bengaluru, India",
     period: "Oct 2021 — Sep 2023",
     bullets: [
-      "Shipped four production services from zero in React: Environment Manager, Cost Management, Service Mesh, and Network Policy.",
-      "Built Rafay’s first design system on Material UI v5 — adopted across every internal web application and used until the 2024 redesign.",
-      "Led a team of 5 frontend engineers: resource planning, OKRs via Lattice, sprint planning, and estimation.",
-      "Improved console performance: reduced bundle size, eliminated re-render storms in key flows, and memoized expensive computations with hooks.",
-      "Stood up end-to-end testing with Cypress as the team’s first automated UI test framework.",
+      "Led 5 frontend engineers; shipped four products from zero: Environment Manager, Cost Management, Service Mesh and Network Policy.",
+      "Created Rafay’s first design system on Material UI v5 and introduced Cypress as the first E2E framework.",
     ],
   },
   {
@@ -83,10 +68,8 @@ export const experience: Role[] = [
     location: "Bengaluru, India",
     period: "May 2018 — Sep 2021",
     bullets: [
-      "Redesigned the Enterprise Application Access client used by 20,000+ Akamai employees, partnering with security and product on the zero-trust access UX.",
-      "Built Angular admin applications for enterprise access configuration and policy management.",
-      "Owned npm supply-chain security for the team: tracked and remediated CVEs and added automated dependency checks in CI to prevent regressions.",
-      "Promoted from Senior SWE II to Lead during this period; recognized as Exceptional Contributor (2019).",
+      "Redesigned the Enterprise Application Access client used by 20,000+ Akamai employees; built Angular admin apps for access policy.",
+      "Owned npm supply-chain security; promoted to Lead and named Exceptional Contributor (2019).",
     ],
   },
   {
@@ -95,37 +78,34 @@ export const experience: Role[] = [
     location: "Bengaluru, India",
     period: "May 2017 — Apr 2018",
     bullets: [
-      "Built the React Native mobile app used by HealthifyMe’s nutritionist coaching staff in production.",
-      "Built D3.js dashboards used by the CEO in board and investor presentations.",
-      "Shipped dashboards for ads, diet/workout planning, and coaching workflows; integrated WebViews for mobile marketing campaigns.",
+      "Built D3.js dashboards used by the CEO in board and investor presentations, and the React Native app for the coaching staff.",
     ],
   },
+];
+
+export const earlier: {
+  title: string;
+  company: string;
+  period: string;
+  note: string;
+}[] = [
   {
     title: "Technology Lead",
     company: "Sporthood",
-    location: "Bengaluru, India",
-    period: "Apr 2016 — Apr 2017",
-    bullets: [
-      "Built web and React Native apps for game management and scoring; digitized workflows that cut operational paperwork by 80%.",
-    ],
+    period: "2016 — 2017",
+    note: "Web and React Native apps that cut paperwork by about 80%.",
   },
   {
     title: "Co-Founder",
     company: "Tymslot",
-    location: "Bengaluru, India",
-    period: "Aug 2015 — Apr 2016",
-    bullets: [
-      "Co-founded a booking product; scaled to 3,000+ bookings within 6 months. Owned product, engineering (4 web apps in JavaScript/PHP), and operations end-to-end.",
-    ],
+    period: "2015 — 2016",
+    note: "Product, engineering and operations; 3,000+ bookings in 6 months.",
   },
   {
     title: "PL/SQL Developer",
     company: "Tata Consultancy Services",
-    location: "Bengaluru, India",
-    period: "Dec 2010 — Aug 2015",
-    bullets: [
-      "Optimized stored procedures and SQL performance with EXPLAIN PLAN, SQL Trace, and TKProf; handled change requests and production incidents.",
-    ],
+    period: "2010 — 2015",
+    note: "SQL performance tuning and production support.",
   },
 ];
 
@@ -135,67 +115,75 @@ export const skills: { group: string; items: string[] }[] = [
     items: [
       "React",
       "TypeScript",
+      "Redux",
       "React Native",
       "Tailwind CSS",
       "shadcn/ui",
-      "Material UI",
-      "Redux",
+      "Radix UI",
       "Storybook",
       "React Flow",
-      "HTML5",
-      "CSS3",
     ],
   },
   {
-    group: "Testing & quality",
-    items: ["Cypress", "End-to-end testing", "CI security & design guardrails"],
-  },
-  {
-    group: "Build & tooling",
-    items: ["Vite", "Webpack", "Docker", "Git / GitHub", "Figma", "JIRA"],
-  },
-  {
-    group: "AI-native development",
+    group: "Quality",
     items: [
-      "Claude (agentic repos, repo-level skills, sandbox-to-PR)",
+      "Vitest",
+      "React Testing Library",
+      "Playwright",
+      "Cypress",
+      "Coverage gates",
+      "CI sharding",
+    ],
+  },
+  {
+    group: "Performance",
+    items: [
+      "Core Web Vitals",
+      "Lighthouse",
+      "Code splitting",
+      "WCAG / ARIA",
+      "i18n + RTL",
+    ],
+  },
+  {
+    group: "AI-native",
+    items: [
+      "Claude Code",
       "Cursor",
-      "GitHub Copilot",
-      "Prompt engineering",
-      "Automated PR generation",
+      "Copilot",
+      "MCP servers",
+      "Agentic repos",
+      "Parallel agents",
     ],
   },
   {
     group: "Leadership",
     items: [
-      "Distributed teams (US + India)",
+      "Frontend strategy",
       "Hiring",
+      "Mentoring",
       "Performance management",
       "OKRs",
-      "Sprint planning",
-      "Cross-functional partnership",
+      "Distributed teams",
     ],
-  },
-  {
-    group: "Earlier stack",
-    items: ["AngularJS", "Polymer", "Electron", "PHP", "PL/SQL"],
   },
 ];
 
 export const education = {
   degree: "B.Tech, Electrical Engineering",
-  school: "TKM College of Engineering, Kerala, India",
-  period: "Sep 2006 — Aug 2010",
+  school: "TKM College of Engineering, India",
+  period: "2006 — 2010",
 };
 
 export const awards: string[] = [
   "Exceptional Contributor — Akamai Technologies (2019)",
   "Best Employee — HealthifyMe (2017)",
-  "Diplôme d’Études en Langue Française (DELF) — Alliance Française de Bangalore",
+  "DELF (French language diploma) — Alliance Française de Bangalore",
 ];
 
 export const languages: string[] = [
-  "English (Native / Fluent)",
-  "Hindi (Fluent)",
-  "Malayalam (Fluent)",
-  "French (Intermediate, DELF certified)",
+  "English",
+  "Hindi",
+  "Malayalam",
+  "French (intermediate)",
 ];

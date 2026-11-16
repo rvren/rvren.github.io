@@ -37,3 +37,10 @@ the app's own source and stamped with the version it was checked at. This matter
 the page previously advertised "30+ hand-tuned themes" for an app that ships **seven**,
 and described a Pomodoro timer two rewrites after it had become a ten-screen product. When
 the app changes, update that file — do not edit counts inline in the page.
+
+### Home page content is sourced too
+- Products (cards on `/`) live in `src/data/projects.ts`, each taken from that product's own
+  repo README and brand folder; icons are copies in `public/products/`. plinth's repo is
+  private, so its card links to an email, not the repo.
+- `public/resume.pdf` is the downloadable résumé; `src/data/resume.ts` is reconciled
+  against it. Replace the PDF and update that file together.

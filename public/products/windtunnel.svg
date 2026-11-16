@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Windtunnel">
+  <!-- App icon: the mark on a violet tile, white line over ink line. Strokes
+       are heavier than in mark.svg so it holds at 16px. src/app/icon.svg is a
+       copy of this file. -->
+  <rect width="64" height="64" rx="15" fill="#7C5CFF"/>
+  <g transform="translate(6.4 6.4) scale(.8)" fill="none" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 25H9C17 25 18 13 28 13S39 25 47 25H58" stroke="#FFFFFF"/>
+    <path d="M6 39H9C17 39 18 51 28 51S39 39 47 39H58" stroke="#0B0D10"/>
+  </g>
+</svg>

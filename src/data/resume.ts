@@ -109,19 +109,78 @@ export const earlier: {
   },
 ];
 
+// Stack: the résumé's skills, plus what the products above are built with (read from
+// each repo's package.json and deploy folder, Nov 2026).
 export const skills: { group: string; items: string[] }[] = [
   {
     group: "Frontend",
     items: [
       "React",
       "TypeScript",
+      "Next.js",
+      "Svelte",
+      "Vue",
       "Redux",
-      "React Native",
+      "Zustand",
+      "TanStack Query",
       "Tailwind CSS",
       "shadcn/ui",
       "Radix UI",
-      "Storybook",
       "React Flow",
+      "Recharts",
+      "D3.js",
+      "Motion",
+    ],
+  },
+  {
+    group: "Backend & data",
+    items: [
+      "Node.js",
+      "PostgreSQL",
+      "pgvector",
+      "PGlite",
+      "Drizzle ORM",
+      "SQLite",
+      "Zod",
+      "REST APIs",
+      "OpenTelemetry",
+      "Tree-sitter",
+    ],
+  },
+  {
+    group: "Desktop",
+    items: [
+      "Electron",
+      "electron-vite",
+      "electron-builder",
+      "Auto-update",
+      "macOS notarization",
+    ],
+  },
+  {
+    group: "AI & LLMs",
+    items: [
+      "Claude API",
+      "MCP",
+      "Ollama",
+      "llama.cpp",
+      "Transformers.js",
+      "Embeddings",
+      "Agent orchestration",
+    ],
+  },
+  {
+    group: "Infra & tooling",
+    items: [
+      "Docker",
+      "Docker Compose",
+      "Terraform",
+      "Cloudflare Workers",
+      "GitHub Actions",
+      "Turborepo",
+      "pnpm workspaces",
+      "Vite",
+      "Webpack",
     ],
   },
   {
@@ -131,6 +190,7 @@ export const skills: { group: string; items: string[] }[] = [
       "React Testing Library",
       "Playwright",
       "Cypress",
+      "axe-core",
       "Coverage gates",
       "CI sharding",
     ],
@@ -146,7 +206,7 @@ export const skills: { group: string; items: string[] }[] = [
     ],
   },
   {
-    group: "AI-native",
+    group: "AI-native workflow",
     items: [
       "Claude Code",
       "Cursor",

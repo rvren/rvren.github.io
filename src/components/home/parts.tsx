@@ -246,7 +246,7 @@ export function StackList() {
           key={s.group}
           className={cn(
             "grid grid-cols-1 gap-2 border-t border-border py-3.5",
-            "sm:grid-cols-[7.5rem_1fr] sm:gap-4",
+            "sm:grid-cols-[9.5rem_1fr] sm:gap-4",
           )}
         >
           <dt className="pt-0.5 text-muted-foreground">{s.group}</dt>

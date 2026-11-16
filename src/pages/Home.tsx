@@ -205,7 +205,11 @@ export default function Home() {
             <ExperienceList />
           </section>
           <section className="mt-24">
-            <SectionHead index="02" label="Stack" />
+            <SectionHead
+              index="02"
+              label="Stack"
+              note="at Rafay and in my own products"
+            />
             <StackList />
           </section>
           <section className="mt-24">

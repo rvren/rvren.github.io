@@ -4,7 +4,7 @@
 export const profile = {
   name: "Renjith Rajendran Viswalekshmi",
   shortName: "Renjith Rajendran",
-  title: "Frontend Engineering Leader",
+  title: "Builder · Maker · Tinkerer",
   subtitle: "Engineering Manager · Frontend Architecture · Design Systems",
   location: "Sunnyvale, CA",
   email: "rv.renjith2@gmail.com",
@@ -15,9 +15,9 @@ export const profile = {
 };
 
 export const intro: string[] = [
-  "Frontend engineering leader with 14+ years building production web applications and 5 years leading frontend teams — hands-on architecture alongside people management.",
+  "I build things. It is what I like to do most. For more than 14 years, I have made software that people use. I make products, developer tools and the systems that teams use to ship. The best part is always the same: a rough idea becomes a real thing.",
   "At Rafay Systems I own the frontend for the GPU PaaS console for AI infrastructure, the product at the center of the company’s 182% ARR growth. I’ve set company-wide frontend standards twice, took the monorepo from no runnable tests to nearly 25,000, and built an AI-native workflow that lets people outside the frontend team ship reviewed UI code.",
-  "After hours I build products of my own — agent simulations, developer platforms and local-first desktop apps.",
+  "Things I’ve made for the love of making them",
 ];
 
 export const highlights: { stat: string; label: string }[] = [

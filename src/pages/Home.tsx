@@ -2,6 +2,12 @@ import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { DotField } from "@/components/DotField";
 import {
+  activityFor,
+  ActivityStrip,
+  InProgressStrip,
+  LiveDot,
+} from "@/components/home/Activity";
+import {
   brandStyle,
   ContactLinks,
   DetailsGrid,
@@ -73,17 +79,26 @@ export default function Home() {
                   style={brandStyle(item)}
                   className="group flex w-[3.6rem] shrink-0 flex-col items-center gap-2 sm:w-20"
                 >
-                  <motion.img
-                    src={item.icon}
-                    alt=""
+                  <motion.span
                     whileHover={reduce ? undefined : { y: -8, scale: 1.12 }}
                     animate={{ y: on ? -6 : 0 }}
                     transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                    className={cn(
-                      "h-12 w-12 rounded-[14px] sm:h-16 sm:w-16 sm:rounded-[16px]",
-                      on && "shadow-[0_14px_36px_-10px_var(--brand)]",
+                    className="relative"
+                  >
+                    <img
+                      src={item.icon}
+                      alt=""
+                      className={cn(
+                        "h-12 w-12 rounded-[14px] sm:h-16 sm:w-16 sm:rounded-[16px]",
+                        on && "shadow-[0_14px_36px_-10px_var(--brand)]",
+                      )}
+                    />
+                    {activityFor(item.name) ? (
+                      <LiveDot />
+                    ) : (
+                      item.inProgress && <LiveDot tone="progress" />
                     )}
-                  />
+                  </motion.span>
                   <span
                     className={cn(
                       "text-[0.7rem] transition-colors",
@@ -142,6 +157,13 @@ export default function Home() {
                     className="hidden h-28 w-28 rounded-[28px] md:block"
                   />
                   <Tags items={p.tags} className="md:justify-end" />
+                </div>
+                <div className="relative md:col-span-2 -mt-7">
+                  {activityFor(p.name) ? (
+                    <ActivityStrip name={p.name} />
+                  ) : (
+                    p.inProgress && <InProgressStrip name={p.name} />
+                  )}
                 </div>
               </motion.article>
             </AnimatePresence>

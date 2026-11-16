@@ -44,3 +44,8 @@ the app changes, update that file — do not edit counts inline in the page.
   private, so its card links to an email, not the repo.
 - `public/resume.pdf` is the downloadable résumé; `src/data/resume.ts` is reconciled
   against it. Replace the PDF and update that file together.
+- "Building now" on the shelf comes from `src/data/activity.json`, a snapshot of each
+  product's commits (several repos are private, so the static site cannot ask GitHub).
+  Refresh it with `npm run activity` before a deploy. A product shows as building only with
+  a commit in the 3 weeks before the snapshot, and a snapshot older than 30 days shows
+  nothing, so a stale deploy never claims work that is not happening.

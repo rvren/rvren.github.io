@@ -21,6 +21,12 @@ export type Product = {
   tags: string[];
   links: ProductLink[];
   year: string;
+  /**
+   * Set by hand: work is underway but not yet visible in commits (see
+   * src/data/activity.json for the commit-backed "Building now"). Shows an
+   * "In progress" label with no numbers.
+   */
+  inProgress?: boolean;
 };
 
 export const products: Product[] = [
@@ -62,6 +68,7 @@ export const products: Product[] = [
     icon: "/sightglass-icon.svg",
     brand: "#8f7bf7",
     tags: ["Electron", "React", "TypeScript", "SQLite", "Local-first"],
+    inProgress: true,
     links: [
       { label: "getsightglass.ai", href: "https://getsightglass.ai/" },
       { label: "Download", href: "/sightglass", internal: true },

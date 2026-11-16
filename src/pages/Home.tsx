@@ -170,7 +170,23 @@ export default function Home() {
           </div>
         </section>
 
-        <dl className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4">
+        <div className="mt-24 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
+          <div>
+            <Kicker className="uppercase tracking-[0.16em]">
+              At Rafay Systems · since 2021
+            </Kicker>
+            <p className="mt-2 font-display text-xl font-light tracking-tight sm:text-2xl">
+              The day job: I own the frontend of the GPU PaaS console.
+            </p>
+          </div>
+          <p className="text-sm text-muted-foreground sm:max-w-[16rem] sm:text-right">
+            These numbers come from that work.
+          </p>
+        </div>
+        <dl
+          data-testid="rafay-highlights"
+          className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-4"
+        >
           {highlights.map((h) => (
             <div key={h.label} className="bg-card/90 p-5 backdrop-blur">
               <dt className="font-display text-2xl font-light tracking-tight">
@@ -186,9 +202,6 @@ export default function Home() {
         <div className="mx-auto max-w-[46rem]">
           <section id="experience" className="mt-24 scroll-mt-24">
             <SectionHead index="01" label="Experience" />
-            <p className="-mt-2 mb-8 text-sm leading-relaxed text-muted-foreground">
-              {intro[1]}
-            </p>
             <ExperienceList />
           </section>
           <section className="mt-24">

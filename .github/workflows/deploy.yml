@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Rebuild daily so the shelf's commit trend (src/data/activity.json) stays current.
+  schedule:
+    - cron: "17 6 * * *"
 
 # Allow the workflow to publish to Pages via OIDC.
 permissions:
@@ -19,6 +22,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ACTIVITY_TOKEN: ${{ secrets.ACTIVITY_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,6 +36,17 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Fresh commit snapshot for the shelf. Several product repos are private, so this
+      # needs ACTIVITY_TOKEN: a fine-grained token with read-only Contents + Metadata on
+      # those repos. Without it, or if GitHub's stats are not ready, the committed
+      # snapshot is used, and the site stops claiming activity once that is 30 days old.
+      - name: Refresh commit activity
+        if: ${{ env.ACTIVITY_TOKEN != '' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.ACTIVITY_TOKEN }}
+        run: npm run activity
 
       - name: Build
         run: npm run build

@@ -46,6 +46,9 @@ the app changes, update that file — do not edit counts inline in the page.
   against it. Replace the PDF and update that file together.
 - "Building now" on the shelf comes from `src/data/activity.json`, a snapshot of each
   product's commits (several repos are private, so the static site cannot ask GitHub).
-  Refresh it with `npm run activity` before a deploy. A product shows as building only with
+  The deploy workflow refreshes it on every push and once a day (cron), using the
+  `ACTIVITY_TOKEN` secret (fine-grained, read-only Contents + Metadata on the product
+  repos); without the secret it falls back to the committed file. `npm run activity`
+  refreshes the committed copy locally. A product shows as building only with
   a commit in the 3 weeks before the snapshot, and a snapshot older than 30 days shows
   nothing, so a stale deploy never claims work that is not happening.

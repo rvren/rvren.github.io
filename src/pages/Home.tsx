@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { DotField } from "@/components/DotField";
+import { FlowField } from "@/components/FlowField";
 import {
   activityFor,
   ActivityStrip,
@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <>
-      <DotField accent={p.brand} />
+      <FlowField accent={p.brand} />
       <main
         id="top"
         className="relative z-10 mx-auto max-w-5xl px-4 pb-16 pt-32 sm:px-6 sm:pt-40"

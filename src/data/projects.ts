@@ -77,13 +77,8 @@ export const products: Product[] = [
       "Durable Objects",
     ],
     inProgress: true,
-    progressNote: "The first version is being built.",
-    links: [
-      {
-        label: "Ask for a preview",
-        href: "mailto:rv.renjith2@gmail.com?subject=Apogee%20preview",
-      },
-    ],
+    progressNote: "Playable now. The first version is still being built.",
+    links: [{ label: "Play", href: "https://apogee.rv-renjith2.workers.dev" }],
     year: "2026",
   },
   {
@@ -111,7 +106,10 @@ export const products: Product[] = [
     icon: "/products/buildboard.svg",
     brand: "#00a865",
     tags: ["Electron", "React", "TypeScript", "SQLite", "Tailwind"],
-    links: [{ label: "Live", href: "https://rvren.github.io/buildboard/" }],
+    links: [
+      { label: "Live", href: "https://rvren.github.io/buildboard/" },
+      { label: "GitHub", href: "https://github.com/rvren/buildboard" },
+    ],
     year: "2026",
   },
   {

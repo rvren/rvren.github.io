@@ -27,6 +27,8 @@ export type Product = {
    * "In progress" label with no numbers.
    */
   inProgress?: boolean;
+  /** The line under "In progress". */
+  progressNote?: string;
 };
 
 export const products: Product[] = [
@@ -55,6 +57,31 @@ export const products: Product[] = [
       {
         label: "Ask for access",
         href: "mailto:rv.renjith2@gmail.com?subject=plinth%20access",
+      },
+    ],
+    year: "2026",
+  },
+  {
+    name: "Apogee",
+    tagline: "How high can you fly?",
+    description:
+      "A 3D hangar of 527 of the world's rockets and a launch game. Orbit, flip and cut open each model, then fly it through birds and meteoroids toward the Moon. The server referees every ranked flight, so every score on the world leaderboard is flown, not submitted.",
+    kicker: "3d game · in development",
+    icon: "/products/apogee.svg",
+    brand: "#ff7a3d",
+    tags: [
+      "three.js",
+      "WebGPU",
+      "React",
+      "Cloudflare Workers",
+      "Durable Objects",
+    ],
+    inProgress: true,
+    progressNote: "The first version is being built.",
+    links: [
+      {
+        label: "Ask for a preview",
+        href: "mailto:rv.renjith2@gmail.com?subject=Apogee%20preview",
       },
     ],
     year: "2026",

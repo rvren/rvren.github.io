@@ -16,6 +16,7 @@ const WEEKS = 12;
 // Product name (as in src/data/projects.ts) → the repos its work lands in.
 const PRODUCTS = {
   Windtunnel: ["windtunnel"],
+  Apogee: ["apogee"],
   plinth: ["plinth"],
   // The Sightglass app's source lives in history-lens; getsightglass is its site.
   Sightglass: ["history-lens", "getsightglass"],
@@ -48,11 +49,20 @@ const out = {
 for (const [name, repos] of Object.entries(PRODUCTS)) {
   const sum = new Array(WEEKS).fill(0);
   let lastCommit = null;
-  for (const repo of repos) {
-    (await weekly(repo)).forEach((n, i) => (sum[i] += n));
-    const [latest] = gh(`repos/${OWNER}/${repo}/commits?per_page=1`);
-    const at = latest?.commit?.committer?.date ?? latest?.commit?.author?.date;
-    if (at && (!lastCommit || at > lastCommit)) lastCommit = at;
+  try {
+    for (const repo of repos) {
+      (await weekly(repo)).forEach((n, i) => (sum[i] += n));
+      const [latest] = gh(`repos/${OWNER}/${repo}/commits?per_page=1`);
+      const at =
+        latest?.commit?.committer?.date ?? latest?.commit?.author?.date;
+      if (at && (!lastCommit || at > lastCommit)) lastCommit = at;
+    }
+  } catch (e) {
+    // A repo the token cannot see answers 404. Skip that product so it cannot stop
+    // the refresh for the others; it then shows no commit numbers.
+    if (!/HTTP 404/.test(`${e.stderr ?? ""}${e.message}`)) throw e;
+    console.warn(`${name.padEnd(11)} skipped: this token cannot read its repo`);
+    continue;
   }
   out.products[name] = { weekly: sum, lastCommit };
   console.log(

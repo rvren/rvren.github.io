@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <>
-      <DotField />
+      <DotField accent={p.brand} />
       <main
         id="top"
         className="relative z-10 mx-auto max-w-5xl px-4 pb-16 pt-32 sm:px-6 sm:pt-40"
@@ -64,7 +64,7 @@ export default function Home() {
           <div
             role="tablist"
             aria-label="Products"
-            className="mx-auto mt-6 flex w-fit max-w-full items-end gap-1 overflow-x-auto rounded-[26px] border border-border bg-card/80 px-3 pb-3 pt-4 backdrop-blur sm:gap-4 sm:px-5"
+            className="mx-auto mt-6 grid w-fit max-w-full grid-cols-3 items-end justify-items-center gap-x-3 gap-y-3 rounded-[26px] border border-border bg-card/80 px-3 pb-3 pt-4 backdrop-blur sm:flex sm:gap-4 sm:px-5"
           >
             {products.map((item, i) => {
               const on = i === active;
@@ -77,7 +77,7 @@ export default function Home() {
                   data-testid={`shelf-${item.name.toLowerCase()}-tab`}
                   onClick={() => setActive(i)}
                   style={brandStyle(item)}
-                  className="group flex w-[3.6rem] shrink-0 flex-col items-center gap-2 sm:w-20"
+                  className="group flex w-[4.75rem] shrink-0 flex-col items-center gap-2 sm:w-20"
                 >
                   <motion.span
                     whileHover={reduce ? undefined : { y: -8, scale: 1.12 }}
@@ -162,7 +162,9 @@ export default function Home() {
                   {activityFor(p.name) ? (
                     <ActivityStrip name={p.name} />
                   ) : (
-                    p.inProgress && <InProgressStrip name={p.name} />
+                    p.inProgress && (
+                      <InProgressStrip name={p.name} note={p.progressNote} />
+                    )
                   )}
                 </div>
               </motion.article>

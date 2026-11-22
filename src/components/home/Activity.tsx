@@ -18,10 +18,12 @@ export function activityFor(name: string) {
   const last = Date.parse(entry.lastCommit);
   const fresh = Date.now() - generatedAt < SNAPSHOT_MAX_AGE;
   const active = fresh && generatedAt - last < ACTIVE_WITHIN;
-  if (!active) return null;
+  // GitHub's weekly stats lag on a new repo; never print "0 commits" beside "Building now".
+  const lastFourWeeks = entry.weekly.slice(-4).reduce((a, b) => a + b, 0);
+  if (!active || lastFourWeeks === 0) return null;
   return {
     weekly: entry.weekly,
-    lastFourWeeks: entry.weekly.slice(-4).reduce((a, b) => a + b, 0),
+    lastFourWeeks,
     lastCommit: new Date(last),
   };
 }
@@ -94,7 +96,13 @@ export function ActivityStrip({ name }: { name: string }) {
 }
 
 /** A hand-set "In progress" line, for work that commits do not show yet. */
-export function InProgressStrip({ name }: { name: string }) {
+export function InProgressStrip({
+  name,
+  note = "The next version is being built.",
+}: {
+  name: string;
+  note?: string;
+}) {
   return (
     <div
       data-testid={`in-progress-${name.toLowerCase()}`}
@@ -107,9 +115,7 @@ export function InProgressStrip({ name }: { name: string }) {
         </span>
         In progress
       </p>
-      <p className="mt-2 text-xs text-muted-foreground">
-        The next version is being built.
-      </p>
+      <p className="mt-2 text-xs text-muted-foreground">{note}</p>
     </div>
   );
 }

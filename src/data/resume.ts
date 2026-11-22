@@ -130,6 +130,8 @@ export const skills: { group: string; items: string[] }[] = [
       "Recharts",
       "D3.js",
       "Motion",
+      "three.js",
+      "WebGPU",
     ],
   },
   {
@@ -145,6 +147,10 @@ export const skills: { group: string; items: string[] }[] = [
       "REST APIs",
       "OpenTelemetry",
       "Tree-sitter",
+      "Hono",
+      "Cloudflare D1",
+      "Durable Objects",
+      "WebAuthn",
     ],
   },
   {

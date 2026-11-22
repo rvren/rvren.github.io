@@ -27,6 +27,8 @@ export type Product = {
    * "In progress" label with no numbers.
    */
   inProgress?: boolean;
+  /** The line under "In progress". */
+  progressNote?: string;
 };
 
 export const products: Product[] = [
@@ -60,6 +62,26 @@ export const products: Product[] = [
     year: "2026",
   },
   {
+    name: "Apogee",
+    tagline: "How high can you fly?",
+    description:
+      "A 3D hangar of 527 of the world's rockets and a launch game. Orbit, flip and cut open each model, then fly it through birds and meteoroids toward the Moon. The server referees every ranked flight, so every score on the world leaderboard is flown, not submitted.",
+    kicker: "3d game · in development",
+    icon: "/products/apogee.svg",
+    brand: "#ff7a3d",
+    tags: [
+      "three.js",
+      "WebGPU",
+      "React",
+      "Cloudflare Workers",
+      "Durable Objects",
+    ],
+    inProgress: true,
+    progressNote: "Playable now. The first version is still being built.",
+    links: [{ label: "Play", href: "https://apogee.rv-renjith2.workers.dev" }],
+    year: "2026",
+  },
+  {
     name: "Sightglass",
     tagline: "See where your attention goes.",
     description:
@@ -84,7 +106,10 @@ export const products: Product[] = [
     icon: "/products/buildboard.svg",
     brand: "#00a865",
     tags: ["Electron", "React", "TypeScript", "SQLite", "Tailwind"],
-    links: [{ label: "Live", href: "https://rvren.github.io/buildboard/" }],
+    links: [
+      { label: "Live", href: "https://rvren.github.io/buildboard/" },
+      { label: "GitHub", href: "https://github.com/rvren/buildboard" },
+    ],
     year: "2026",
   },
   {

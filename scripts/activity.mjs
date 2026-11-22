@@ -8,10 +8,37 @@
 // and the date of the latest commit on any of them.
 
 import { execFileSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const OWNER = "rvren";
 const WEEKS = 12;
+const WEEK_MS = 7 * 86_400_000;
+const SNAPSHOT = new URL("../src/data/activity.json", import.meta.url);
+const previous = JSON.parse(readFileSync(SNAPSHOT, "utf8"));
+
+// GitHub's weekly buckets start on Sunday (UTC).
+function weekStart(ms) {
+  const d = new Date(ms);
+  return Date.UTC(
+    d.getUTCFullYear(),
+    d.getUTCMonth(),
+    d.getUTCDate() - d.getUTCDay(),
+  );
+}
+
+// The last known history of a product, moved along so each bar stays on its own week.
+function carriedOver(name, now) {
+  const entry = previous.products?.[name];
+  if (!entry) return null;
+  const elapsed = Math.round(
+    (weekStart(now) - weekStart(Date.parse(previous.generatedAt))) / WEEK_MS,
+  );
+  const weekly = [
+    ...entry.weekly.slice(elapsed),
+    ...new Array(elapsed).fill(0),
+  ];
+  return { weekly: weekly.slice(-WEEKS), lastCommit: entry.lastCommit };
+}
 
 // Product name (as in src/data/projects.ts) → the repos its work lands in.
 const PRODUCTS = {
@@ -58,10 +85,14 @@ for (const [name, repos] of Object.entries(PRODUCTS)) {
       if (at && (!lastCommit || at > lastCommit)) lastCommit = at;
     }
   } catch (e) {
-    // A repo the token cannot see answers 404. Skip that product so it cannot stop
-    // the refresh for the others; it then shows no commit numbers.
+    // A repo the token cannot see answers 404. Keep that product's last known history
+    // so it cannot stop the refresh for the others or lose its chart.
     if (!/HTTP 404/.test(`${e.stderr ?? ""}${e.message}`)) throw e;
-    console.warn(`${name.padEnd(11)} skipped: this token cannot read its repo`);
+    const kept = carriedOver(name, Date.parse(out.generatedAt));
+    if (kept) out.products[name] = kept;
+    console.warn(
+      `${name.padEnd(11)} kept last snapshot: this token cannot read its repo`,
+    );
     continue;
   }
   out.products[name] = { weekly: sum, lastCommit };
@@ -70,8 +101,5 @@ for (const [name, repos] of Object.entries(PRODUCTS)) {
   );
 }
 
-writeFileSync(
-  new URL("../src/data/activity.json", import.meta.url),
-  JSON.stringify(out, null, 2) + "\n",
-);
+writeFileSync(SNAPSHOT, JSON.stringify(out, null, 2) + "\n");
 console.log("wrote src/data/activity.json");
